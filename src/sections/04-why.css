@@ -1,0 +1,140 @@
+/* --- 04 WHY WE EXIST ------------------------------------------------------ */
+
+/* --- Top half: heading + photo left, argument right ---------------------- */
+.why__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s6) var(--s8);
+  align-items: start;
+}
+
+.why__heading {
+  max-width: 11ch;
+  margin-left: -0.015em;
+  margin-bottom: var(--s6);
+}
+
+/* --- Figure --------------------------------------------------------------- */
+.why__figure {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--paper);
+  border: var(--hairline);
+}
+
+.why__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why__figcap {
+  position: absolute;
+  left: var(--s3);
+  bottom: var(--s3);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.why__figure.is-empty::after {
+  content: '[ ROOM SHOT · 16:9 ]';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  color: var(--ink-mute);
+}
+
+/* --- Right column --------------------------------------------------------- */
+.why__right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+/* The two labels are the only blue in the top half — they carry the reading
+   order, so they earn it. The themes label stays muted so it reads as a
+   caption on the rail rather than a third beat of the argument. */
+.why__block-label {
+  color: var(--blue);
+  margin-bottom: var(--s3);
+}
+
+.why__block-text {
+  color: var(--ink-mute);
+  max-width: 52ch;
+}
+
+/* --- Themes rail ---------------------------------------------------------- */
+.why__themes { margin-top: var(--s3); }
+
+.why__themes-label {
+  padding-bottom: var(--s3);
+  border-bottom: var(--hairline);
+  margin-bottom: 0;
+}
+
+.why__themes-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s3);
+  padding-block: var(--s4);
+  border-bottom: var(--hairline);
+}
+
+.why__theme {
+  font-size: var(--t-body);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* --- Bottom row ----------------------------------------------------------
+   Pull-quote and mission on one line, divided from the argument above by a
+   full-width rule. The quote is left-aligned here rather than centred: it is
+   now in conversation with the paragraph beside it, not a standalone break. */
+.why__bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s6) var(--s8);
+  align-items: end;
+  margin-top: var(--s7);
+  padding-top: var(--s7);
+  border-top: var(--hairline);
+}
+
+.why__quote {
+  color: var(--blue);
+  max-width: 14ch;
+  margin-left: -0.015em;
+}
+
+.why__after {
+  color: var(--ink-mute);
+  max-width: 52ch;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 1040px) {
+  .why__top,
+  .why__bottom {
+    grid-template-columns: 1fr;
+    gap: var(--s5);
+    align-items: start;
+  }
+  .why__heading { max-width: 16ch; margin-bottom: var(--s5); }
+  .why__bottom { margin-top: var(--s6); padding-top: var(--s6); }
+}
+
+@media (max-width: 640px) {
+  .why__themes-list { grid-template-columns: repeat(2, 1fr); gap: var(--s3) var(--s4); }
+  .why__heading { max-width: none; }
+}

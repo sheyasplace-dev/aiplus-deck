@@ -1,0 +1,88 @@
+/* --- 01 HERO -------------------------------------------------------------- */
+
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--s6);
+  padding: var(--s5) var(--gutter) var(--s5);
+  max-width: var(--maxw);
+  margin-inline: auto;
+  background: var(--paper);
+}
+
+/* --- Top bar -------------------------------------------------------------- */
+.hero__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+
+.hero__brand {
+  font-size: var(--t-data-lg);
+  letter-spacing: var(--t-data-lg-track);
+}
+
+/* One CTA is enough above the fold; the bar copy is redundant on small
+   screens where the in-body pill is already visible. */
+@media (max-width: 640px) {
+  .hero__bar-cta { display: none; }
+}
+
+/* --- Body ----------------------------------------------------------------- */
+.hero__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--s6);
+}
+
+.hero__label { margin-bottom: var(--s5); }
+
+.hero__headline {
+  /* Optical alignment: Switzer's left sidebearing at this size reads as an
+     indent against the hairline below it. */
+  margin-left: -0.015em;
+  margin-bottom: var(--s5);
+  max-width: 16ch;
+}
+
+.hero__lead { margin-bottom: var(--s6); }
+
+.hero__ctas {
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+  flex-wrap: wrap;
+}
+
+/* --- Stat strip ----------------------------------------------------------- */
+.hero__strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
+  border-top: var(--hairline);
+  padding-top: var(--s4);
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.hero__stat-value {
+  font-size: var(--t-data-lg);
+  letter-spacing: var(--t-data-lg-track);
+}
+
+@media (max-width: 900px) {
+  .hero__strip { grid-template-columns: repeat(2, 1fr); row-gap: var(--s4); }
+}
+
+@media (max-width: 640px) {
+  .hero { gap: var(--s5); }
+  .hero__headline { max-width: none; }
+  .hero__ctas { gap: var(--s4); }
+}

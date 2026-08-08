@@ -1,0 +1,70 @@
+/* --- 12 CLOSE ------------------------------------------------------------- */
+
+.close {
+  background: var(--paper);
+  min-height: 90svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s7);
+}
+
+.close__inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.close__headline {
+  max-width: 14ch;
+  margin-left: -0.015em;
+  margin-bottom: var(--s5);
+}
+
+/* --- Date -----------------------------------------------------------------
+   Set at the larger data size: this is the single most consequential fact on
+   the last screen, and it should be the first thing read after the headline. */
+.close__when {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--s3) var(--s4);
+  padding-block: var(--s4);
+  border-top: var(--hairline);
+  border-bottom: var(--hairline);
+  margin-bottom: var(--s5);
+}
+
+.close__date {
+  font-size: var(--t-data-lg);
+  letter-spacing: var(--t-data-lg-track);
+}
+
+.close__body { margin-bottom: var(--s6); }
+
+.close__ctas {
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+  flex-wrap: wrap;
+}
+
+/* --- Footer --------------------------------------------------------------- */
+.close__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  flex-wrap: wrap;
+  padding-top: var(--s4);
+  padding-bottom: var(--s5);
+  border-top: var(--hairline);
+}
+
+.close__site { color: var(--blue); }
+
+@media (max-width: 640px) {
+  .close__headline { max-width: none; }
+  .close__ctas { gap: var(--s4); }
+}

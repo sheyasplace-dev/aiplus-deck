@@ -1,0 +1,116 @@
+/* --- 05 WHAT WE RUN ------------------------------------------------------- */
+
+.fmt__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+  gap: var(--s6);
+  align-items: start;
+}
+
+.fmt__list { list-style: none; }
+
+/* --- Row -----------------------------------------------------------------
+   Three tracks: name, blurb, meta. Fixed at every state so a hover can only
+   change colour — never position, never size.                             */
+.fmt__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto;
+  gap: var(--grid-gap);
+  align-items: baseline;
+  padding-block: var(--s5);
+  border-top: var(--hairline);
+  cursor: default;
+}
+
+.fmt__row:last-child { border-bottom: var(--hairline); }
+
+.fmt__row:focus-visible { outline: 1px solid var(--blue); outline-offset: 4px; }
+
+.fmt__name-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.fmt__name {
+  transition: color var(--dur) var(--ease);
+}
+
+.fmt__row.is-active .fmt__name { color: var(--blue); }
+
+.fmt__blurb { max-width: 42ch; }
+
+.fmt__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* --- Preview -------------------------------------------------------------
+   Sticks alongside the list while it scrolls. Images are stacked and swapped
+   on opacity only.                                                         */
+.fmt__preview {
+  position: sticky;
+  top: var(--s6);
+}
+
+.fmt__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: var(--hairline);
+}
+
+/* Shown when no image file has loaded — the stack is empty and this is the
+   ground behind it. */
+.fmt__frame::after {
+  content: 'FORMAT PHOTOGRAPHY PENDING';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--s4);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.fmt__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.fmt__img.is-active { opacity: 1; }
+
+/* --- Responsive ----------------------------------------------------------
+   Below 1040px there is no room for a preview column, and below that there is
+   usually no pointer either. The list carries the section on its own.      */
+@media (max-width: 1040px) {
+  .fmt__grid { grid-template-columns: 1fr; }
+  .fmt__preview { display: none; }
+  .fmt__row { grid-template-columns: minmax(0, 1fr) auto; }
+  .fmt__blurb { grid-column: 1 / -1; grid-row: 2; max-width: none; }
+}
+
+@media (max-width: 640px) {
+  .fmt__row { grid-template-columns: 1fr; }
+  .fmt__meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--s3);
+    text-align: left;
+  }
+}

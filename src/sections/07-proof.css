@@ -1,0 +1,113 @@
+/* --- 07 PROOF WALL -------------------------------------------------------- */
+
+.proof { background: var(--surface); }
+
+.pw__stage {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s5);
+  padding-block: var(--s6);
+  overflow: hidden;
+}
+
+.pw__head .s-head { margin-bottom: 0; }
+
+/* --- Grid ----------------------------------------------------------------
+   Auto-fill keeps the wall dense at any width; 76 cells reflow from about 14
+   columns down to 5 without any breakpoint of their own.                   */
+.pw__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: var(--s2);
+}
+
+.pw__cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-items: center;
+  will-change: transform, opacity;
+}
+
+/* Faces: headshot when the file exists, initials when it does not. */
+.pw__cell--face {
+  background: var(--paper);
+  border: var(--hairline);
+}
+
+.pw__initials {
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  color: var(--ink-mute);
+}
+
+.pw__cell--face img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Wordmarks: no logo files yet, so the company name is set as type. Reads as
+   deliberate rather than missing, and stays on palette. */
+.pw__cell--logo {
+  background: var(--blue-soft);
+  padding: 4px;
+}
+
+.pw__cell--logo span {
+  font-family: var(--font-body);
+  font-size: 0.5rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--ink);
+  overflow: hidden;
+}
+
+/* --- The resolve ---------------------------------------------------------
+   Sits over the receded grid, centred on the stage.                       */
+.pw__resolve {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s4);
+  text-align: center;
+  pointer-events: none;
+}
+
+.pw__resolve .line { display: block; }
+
+.pw__dot { color: var(--blue); }
+
+/* --- Static / reduced motion ---------------------------------------------
+   No pin, no assembly. The wall and the claim both simply exist, with the
+   grid pushed back so the line stays readable over it.                    */
+.proof--static .pw__resolve {
+  position: static;
+  transform: none;
+  margin-top: var(--s5);
+}
+
+@media (max-width: 640px) {
+  .pw__grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
+  .pw__resolve { gap: var(--s2); flex-direction: column; }
+  .pw__dot { display: none; }
+}

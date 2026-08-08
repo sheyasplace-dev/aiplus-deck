@@ -1,0 +1,37 @@
+/* --- 09 TESTIMONIALS ------------------------------------------------------
+   White ground on purpose: it sits between the blue-heavy audience bars and
+   the surface band of the rate card, and needs to read as a breath.       */
+
+.quo { background: var(--paper); }
+
+.quo__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.quo__item {
+  padding-block: var(--s7);
+  border-top: var(--hairline);
+}
+
+.quo__item:last-child { border-bottom: var(--hairline); }
+
+/* No quote marks, no italics, no colour. At this size the sentence carries
+   itself and any ornament reads as distrust of the words. */
+.quo__text {
+  max-width: 24ch;
+  margin-left: -0.015em;
+  margin-bottom: var(--s5);
+}
+
+.quo__by {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .quo__item { padding-block: var(--s6); }
+  .quo__text { max-width: none; }
+}

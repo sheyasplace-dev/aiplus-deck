@@ -1,0 +1,131 @@
+/* --- 06 TRACK RECORD ------------------------------------------------------ */
+
+.rail { overflow: hidden; }
+
+.rail__viewport {
+  /* Starts at the page gutter so the first card aligns with the section head,
+     then runs off the right edge — the overflow is the signal that there is
+     more to come. */
+  padding-left: var(--gutter);
+  overflow: hidden;
+}
+
+.rail__track {
+  display: flex;
+  gap: var(--grid-gap);
+  width: max-content;
+  will-change: transform;
+}
+
+/* --- Card ----------------------------------------------------------------- */
+.rail__card {
+  width: clamp(300px, 34vw, 460px);
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s3) var(--s4);
+  align-items: baseline;
+}
+
+.rail__frame {
+  grid-column: 1 / -1;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: var(--hairline);
+  margin-bottom: var(--s3);
+}
+
+.rail__frame::after {
+  content: 'EVENT PHOTOGRAPHY PENDING';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  text-align: center;
+  padding: var(--s3);
+}
+
+.rail__img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rail__index { grid-column: 1 / -1; }
+
+.rail__edition { grid-column: 1; }
+
+.rail__date { grid-column: 2; text-align: right; }
+
+.rail__venue { grid-column: 1 / -1; }
+
+.rail__stat {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  padding-top: var(--s3);
+  border-top: var(--hairline);
+}
+
+.rail__detail { grid-column: 1 / -1; }
+
+/* --- Progress ------------------------------------------------------------- */
+.rail__progress {
+  margin-top: var(--s6);
+  height: 1px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.rail__progress-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* --- Fallbacks -----------------------------------------------------------
+   rail--short: too few cards to justify a pin, so they sit in a plain row.
+   rail--native: narrow screens and static mode — swipe instead of scrub.  */
+.rail--short .rail__viewport,
+.rail--native .rail__viewport {
+  padding-inline: var(--gutter);
+}
+
+.rail--short .rail__track {
+  width: 100%;
+  max-width: var(--maxw);
+  flex-wrap: wrap;
+}
+
+.rail--native .rail__viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.rail--native .rail__viewport::-webkit-scrollbar { display: none; }
+
+.rail--native .rail__card { scroll-snap-align: start; }
+
+.rail--short .rail__progress { display: none; }
+
+@media (max-width: 899px) {
+  .rail__card { width: min(78vw, 380px); }
+  .rail__progress { display: none; }
+}

@@ -1,0 +1,173 @@
+@import './tokens.css';
+
+/* ============================================================================
+   BASE — reset, page frame, and the shared type classes every section uses.
+   ============================================================================ */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto; /* Lenis owns scrolling */
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+video { display: block; max-width: 100%; height: auto; }
+
+a { color: var(--blue); text-decoration: none; }
+
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+::selection { background: var(--blue-soft); color: var(--ink); }
+
+/* --- Layout frame -------------------------------------------------------- */
+.section { padding-block: var(--section-pad); }
+.section--surface { background: var(--surface); }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* --- Section head: label + counter, then heading. Fixed rhythm. ---------- */
+.s-head { margin-bottom: var(--s6); }
+
+.s-head__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-bottom: var(--s4);
+  border-bottom: var(--hairline);
+  margin-bottom: var(--s5);
+}
+
+.s-head__heading {
+  max-width: 18ch;
+  margin-left: -0.015em;
+}
+
+/* --- Type classes -------------------------------------------------------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: var(--t-display-track);
+}
+
+.t-hero { font-size: var(--t-hero); line-height: var(--t-hero-lh); }
+.t-d1 { font-size: var(--t-d1); line-height: var(--t-d1-lh); }
+.t-d2 { font-size: var(--t-d2); line-height: var(--t-d2-lh); }
+.t-d3 { font-size: var(--t-d3); line-height: var(--t-d3-lh); }
+.t-figure { font-size: var(--t-figure); line-height: var(--t-figure-lh); }
+
+.body { font-size: var(--t-body); line-height: var(--t-body-lh); max-width: var(--measure); }
+.lead { font-size: var(--t-lead); line-height: var(--t-lead-lh); max-width: var(--measure); }
+.caption { font-size: var(--t-caption); line-height: var(--t-caption-lh); color: var(--ink-mute); }
+
+/* Every number, price, date, tier name and section label. */
+.data {
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+}
+.data--lg { font-size: var(--t-data-lg); letter-spacing: var(--t-data-lg-track); }
+
+.mute { color: var(--ink-mute); }
+
+/* Visible to screen readers only — used for <dt> labels on data pairs where
+   the term would be visual noise but the pairing still needs to be announced. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.btn--primary { background: var(--blue); color: var(--paper); }
+.btn--primary:hover { background: var(--ink); }
+
+.btn--ghost { border: var(--hairline); color: var(--ink); }
+.btn--ghost:hover { border-color: var(--ink); }
+
+/* Text link with a rule that does not shift layout on hover. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color var(--dur) var(--ease);
+}
+.link:hover { border-bottom-color: var(--blue); }
+
+/* --- Masked line reveal — the page's only headline entrance --------------
+   .line clips; .line > span is what moves. Padding/negative margin keeps
+   descenders from being cut by the clip at tight line-heights.             */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.line > span { display: block; will-change: transform; }
+
+/* --- Reduced motion / ?static=1 ------------------------------------------
+   main.js stamps data-static on <html>. Both paths land in final state.    */
+:root[data-static='true'] .line > span { transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

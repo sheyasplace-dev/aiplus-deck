@@ -1,0 +1,60 @@
+/* --- 03 NUMBERS ----------------------------------------------------------- */
+
+.num__list { list-style: none; }
+
+.num__row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 20rem);
+  align-items: baseline;
+  gap: var(--grid-gap);
+  padding-block: var(--s5);
+  border-top: var(--hairline);
+}
+
+.num__row:last-child { border-bottom: var(--hairline); }
+
+.num__index { padding-top: 0.5em; }
+
+/* --- Figure --------------------------------------------------------------
+   A counting number changes width on almost every frame — "9" then "1,204"
+   then "50,000" — which drags the whole row around while it ticks. The sizer
+   is the final string rendered invisibly in normal flow; the live value is
+   absolutely positioned over it. The row is laid out at its end state from
+   the first frame and nothing reflows.                                     */
+.num__figure {
+  position: relative;
+  margin-left: -0.015em;
+}
+
+.num__value {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+}
+
+.num__sizer { visibility: hidden; }
+
+/* --- Meta ----------------------------------------------------------------- */
+.num__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding-top: 0.5em;
+}
+
+.num__note { max-width: 34ch; }
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .num__row {
+    grid-template-columns: 3rem 1fr;
+    row-gap: var(--s3);
+  }
+  .num__meta { grid-column: 2; padding-top: 0; }
+}
+
+@media (max-width: 560px) {
+  .num__row { grid-template-columns: 1fr; }
+  .num__index { display: none; }
+  .num__meta { grid-column: 1; }
+}

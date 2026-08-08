@@ -1,0 +1,72 @@
+/* --- 02 THE ROOM ---------------------------------------------------------- */
+
+/* Genuinely edge to edge — no gutter, no radius, no max-width. Coming
+   straight off a hero that is type on white, the full width is the contrast. */
+.section-bleed {
+  width: 100%;
+  margin-block: var(--section-pad);
+}
+
+.room__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.room__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Caption -------------------------------------------------------------
+   Sits on the image, so it needs its own ground rather than relying on the
+   photo being dark enough. A --paper chip keeps it legible over anything and
+   stays inside the palette — no scrims, no gradients.                      */
+.room__caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--gutter);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 999px;
+}
+
+/* --- No asset yet --------------------------------------------------------- */
+.room--placeholder .room__frame {
+  border-block: var(--hairline);
+}
+
+.room--placeholder .room__frame::after {
+  content: 'PHOTOGRAPHY PENDING · 16:9 · public/media/room-main.jpg';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  text-align: center;
+  padding: var(--s4);
+}
+
+@media (max-width: 640px) {
+  /* Still narrower than 16:9 so the frame has presence on a phone, but not
+     the 4:5 a portrait crop would want — this is a wide stage shot and a tall
+     crop throws away the panel and the room either side of it. */
+  .room__frame { aspect-ratio: 3 / 2; }
+  .room__caption {
+    left: var(--s3);
+    right: var(--s3);
+    bottom: var(--s3);
+    text-align: center;
+  }
+  .room--placeholder .room__frame::after { font-size: 0.6rem; }
+}

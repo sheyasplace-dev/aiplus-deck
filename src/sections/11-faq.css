@@ -1,0 +1,80 @@
+/* --- 11 FAQ --------------------------------------------------------------- */
+
+.faq__list { max-width: 900px; }
+
+.faq__item { border-top: var(--hairline); }
+
+.faq__item:last-child { border-bottom: var(--hairline); }
+
+/* --- Question ------------------------------------------------------------- */
+.faq__q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-block: var(--s5);
+  text-align: left;
+}
+
+.faq__q:focus-visible { outline: 1px solid var(--blue); outline-offset: 4px; }
+
+.faq__q-text { transition: color var(--dur) var(--ease); }
+
+.faq__q:hover .faq__q-text,
+.faq__item.is-open .faq__q-text { color: var(--blue); }
+
+/* --- Mark ----------------------------------------------------------------
+   A plus built from two rules. The vertical stroke rotates away on open, so
+   it reads as + then −. Rotation only; the button box never changes size.  */
+.faq__mark {
+  position: relative;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+}
+
+.faq__mark::before,
+.faq__mark::after {
+  content: '';
+  position: absolute;
+  background: var(--ink);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.faq__mark::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  margin-top: -0.5px;
+}
+
+.faq__mark::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  margin-left: -0.5px;
+}
+
+.faq__item.is-open .faq__mark::after { transform: rotate(90deg); }
+
+.faq__item.is-open .faq__mark::before,
+.faq__item.is-open .faq__mark::after { background: var(--blue); }
+
+/* --- Answer --------------------------------------------------------------
+   Height is animated on the wrapper; the padding lives on the inner element
+   so it is clipped with the text instead of holding the panel open at 0.   */
+.faq__a { overflow: hidden; }
+
+.faq__a-inner {
+  padding-bottom: var(--s5);
+  padding-right: var(--s6);
+  color: var(--ink-mute);
+}
+
+@media (max-width: 640px) {
+  .faq__q { padding-block: var(--s4); }
+  .faq__a-inner { padding-right: 0; }
+}
