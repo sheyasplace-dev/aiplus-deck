@@ -1,5 +1,5 @@
 /* ============================================================================
-   09 TESTIMONIALS — large display type on white. No cards, no quote marks.
+   10 TESTIMONIALS — large display type on white. No cards, no quote marks.
    The words are the design; a card would make them look like a widget and
    quote marks would make them look like stock copy.
 
@@ -13,7 +13,7 @@ import { testimonials } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
 import { maskAutoLines, observeLines, setLinesHidden, revealLines } from '../lib/reveal.js';
-import './09-testimonials.css';
+import './10-testimonials.css';
 
 function item(t) {
   return `
@@ -34,7 +34,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: testimonials.label, index: 9 })}
+      ${sectionHead({ label: testimonials.label, index: 10 })}
       <div class="quo__list">${testimonials.items.map(item).join('')}</div>
     </div>
   `;

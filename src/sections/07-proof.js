@@ -1,48 +1,68 @@
 /* ============================================================================
-   07 PROOF WALL — the signature section, and the only showy moment on the page.
+   07 PROOF — the logo wall, and the only showy moment on the page.
 
-   Pinned. 76 cells (40 speakers, 36 companies) assemble from scattered
-   positions into a dense grid across the first 70% of the scrub, then recede
-   so a single line resolves on top of them. Everything it claims is countable
-   from the arrays it is built out of.
+   Pinned. Every company whose people took the stage assembles from scattered
+   positions into a grid across the first 62% of the scrub, then recedes so a
+   single line resolves on top. Speakers have their own gallery in 08; this
+   section is companies alone.
+
+   Logo resolution per card, in order: self-hosted SVG, optional remote
+   candidates, then the company name as type. The wall is never empty.
    ============================================================================ */
 
 import { gsap } from 'gsap';
-import { speakers, companies, proof } from '../data/content.js';
+import { companies, proof } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
 import './07-proof.css';
 
-const initials = (name) =>
-  name.split(/\s+/).slice(0, 2).map((w) => w[0]).join('');
+const L = proof.logos;
 
-/** Interleave faces and wordmarks so neither clumps in one corner. */
-function cells() {
-  const faces = speakers.map((s) => ({ type: 'face', ...s }));
-  const marks = companies.map((c) => ({ type: 'logo', name: c }));
-  const out = [];
-  const ratio = Math.ceil(faces.length / marks.length);
-  let f = 0;
-  let m = 0;
-  while (f < faces.length || m < marks.length) {
-    for (let i = 0; i < ratio && f < faces.length; i++) out.push(faces[f++]);
-    if (m < marks.length) out.push(marks[m++]);
-  }
-  return out;
+/**
+ * Candidate URLs for one company, best first.
+ *
+ * The filename is exact rather than probed across extensions: a missing file
+ * does not 404 under the dev server's SPA fallback, it returns index.html with
+ * a 200, so guessing extensions means feeding HTML to an <img> once per miss.
+ * Set `logo` on a company to point at a hand-made vector instead.
+ */
+function sources(c) {
+  const local = [`/media/logos/${c.logo || `${c.domain}.png`}`];
+  if (!L.useRemote || c.unconfirmed) return local;
+  return local.concat(L.remote.map((t) => t.replace('{d}', c.domain)));
 }
 
-function cellHTML(cell) {
-  if (cell.type === 'logo') {
-    return `<li class="pw__cell pw__cell--logo"><span>${cell.name}</span></li>`;
-  }
-  const slug = cell.name.toLowerCase().replace(/[^a-z]+/g, '-');
+function cell(c) {
   return `
-    <li class="pw__cell pw__cell--face" title="${cell.name} — ${cell.title}, ${cell.company}">
-      <span class="pw__initials" aria-hidden="true">${initials(cell.name)}</span>
-      <img src="/media/speakers/${slug}.jpg" alt="${cell.name}, ${cell.company}"
-           loading="lazy" decoding="async">
+    <li class="pw__cell">
+      <span class="pw__logo">
+        <img alt="${c.name}" decoding="async">
+      </span>
+      <span class="pw__name">${c.name}</span>
     </li>
   `;
+}
+
+/**
+ * Walk the candidate list until one loads at a usable size. Anything that
+ * fails or resolves too small falls through; if all fail the slot stays empty
+ * and the name below carries the card on its own.
+ */
+function wireLogo(img, list) {
+  let i = -1;
+  const next = () => {
+    i += 1;
+    if (i >= list.length) { img.remove(); return; }
+    img.src = list[i];
+  };
+  img.addEventListener('error', next);
+  img.addEventListener('load', () => {
+    // naturalWidth 0 means the bytes did not decode as an image — treat it as
+    // a miss, never as an unknown to be trusted.
+    if (!img.naturalWidth || img.naturalWidth < L.minPx) next();
+    else img.classList.add('is-on');
+  });
+  next();
 }
 
 function render() {
@@ -52,19 +72,28 @@ function render() {
 
   el.innerHTML = `
     <div class="pw__stage">
-      <div class="wrap pw__head">${sectionHead({ label: proof.label, index: 7 })}</div>
-      <ul class="pw__grid wrap">${cells().map(cellHTML).join('')}</ul>
+      <div class="wrap pw__head">
+        ${sectionHead({ label: proof.label, index: 7 })}
+        <div class="pw__head-row">
+          <h2 class="pw__heading display t-d3">${proof.heading}</h2>
+          <p class="pw__tally data mute">${companies.length} logos</p>
+        </div>
+      </div>
+
+      <ul class="pw__grid wrap">${companies.map(cell).join('')}</ul>
+
       <p class="pw__resolve wrap">
         ${proof.resolve
           .map((part) => `<span class="line"><span class="data--lg">${part}</span></span>`)
           .join('<span class="pw__dot" aria-hidden="true">·</span>')}
       </p>
+
+      <p class="wrap pw__foot caption">${proof.footnote}</p>
     </div>
   `;
 
-  el.querySelectorAll('.pw__cell--face img').forEach((img) => {
-    img.addEventListener('error', () => img.remove());
-  });
+  [...el.querySelectorAll('.pw__logo img')].forEach((img, i) =>
+    wireLogo(img, sources(companies[i])));
 
   return el;
 }
@@ -86,7 +115,7 @@ export function init(mount, staticMode) {
   gsap.set(lines, { yPercent: 115 });
   gsap.set(dots, { opacity: 0 });
 
-  // Scattered start. Offsets are per-cell so the grid does not assemble as one
+  // Scattered start. Offsets are per-cell so the wall does not assemble as one
   // rigid block sliding into place.
   const scatter = gsap.utils.random(-90, 90, 1, true);
   tiles.forEach((t) => gsap.set(t, { opacity: 0, x: scatter(), y: scatter() }));
@@ -109,10 +138,10 @@ export function init(mount, staticMode) {
     y: 0,
     ease: MOTION.ease,
     duration: 0.62,
-    stagger: { each: 0.006, from: 'center', grid: 'auto' },
+    stagger: { each: 0.008, from: 'center', grid: 'auto' },
   }, 0);
 
-  // 0.7 → 1: the grid steps back and the claim lands on top of it.
+  // 0.7 → 1: the wall steps back and the claim lands on top of it.
   tl.to(grid, { opacity: 0.12, duration: 0.2, ease: MOTION.ease }, 0.7)
     .to(lines, {
       yPercent: 0,

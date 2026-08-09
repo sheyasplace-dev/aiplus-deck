@@ -7,6 +7,13 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+let instance = null;
+
+/** The live Lenis instance, or null in static mode. */
+export function getLenis() {
+  return instance;
+}
+
 export function initSmoothScroll(staticMode) {
   // In static mode we leave native scrolling alone entirely.
   if (staticMode) return null;
@@ -37,5 +44,6 @@ export function initSmoothScroll(staticMode) {
     lenis.scrollTo(target, { offset: 0 });
   });
 
+  instance = lenis;
   return lenis;
 }

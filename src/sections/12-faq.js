@@ -1,5 +1,5 @@
 /* ============================================================================
-   11 FAQ — quiet accordion on hairline dividers.
+   12 FAQ — quiet accordion on hairline dividers.
    Multiple panels may be open at once. Single-open accordions collapse the
    thing you just read the moment you open the next one, which is exactly
    wrong for a reader scanning objections before a call.
@@ -9,7 +9,7 @@ import { gsap } from 'gsap';
 import { faq } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
-import './11-faq.css';
+import './12-faq.css';
 
 // Disclosure is a UI response, not an entrance. At the page's 1.1s it feels
 // broken; this is the one place the global duration is deliberately not used.
@@ -38,7 +38,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: faq.label, index: 11 })}
+      ${sectionHead({ label: faq.label, index: 12 })}
       <div class="faq__list">${faq.items.map(item).join('')}</div>
     </div>
   `;

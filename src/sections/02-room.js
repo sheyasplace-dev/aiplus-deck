@@ -1,7 +1,7 @@
 /* ============================================================================
-   02 THE ROOM — full-bleed evidence, landing straight after a section with no
-   image at all. The contrast is the point, so this runs edge to edge with no
-   padding and no radius.
+   02 THE ROOM — the first evidence, landing straight after a section with no
+   image at all. An inset rounded panel rather than a full bleed: held in from
+   the page margins, capped short of --maxw, photo sitting on a --surface mat.
 
    Two media paths, chosen by content.js:
    · room.video set → scroll-scrubbed video, currentTime driven by progress
@@ -32,9 +32,11 @@ function render() {
   el.id = 'room';
 
   el.innerHTML = `
-    <figure class="room__frame">
-      ${media()}
-      <figcaption class="room__caption data">${room.caption}</figcaption>
+    <figure class="room__panel">
+      <div class="room__frame">
+        ${media()}
+        <figcaption class="room__caption data">${room.caption}</figcaption>
+      </div>
     </figure>
   `;
 
@@ -73,19 +75,37 @@ export function init(mount, staticMode) {
   const el = render();
   mount.appendChild(el);
 
-  const frame = el.querySelector('.room__frame');
+  const panel = el.querySelector('.room__panel');
+  const asset = el.querySelector('.room__media');
   const caption = el.querySelector('.room__caption');
 
   if (staticMode) return el;
 
-  // Clip wipe rather than a fade — same masked vocabulary as the headlines.
+  // Panel arrives first, on the standard y/opacity entrance — the mat is the
+  // frame the wipe then plays inside.
   gsap.fromTo(
-    frame,
+    panel,
+    { y: MOTION.y, opacity: 0 },
+    {
+      y: 0,
+      opacity: 1,
+      duration: MOTION.dur,
+      ease: MOTION.ease,
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+    },
+  );
+
+  // Clip wipe rather than a fade — same masked vocabulary as the headlines.
+  // Runs on the media, not the frame, so the frame's radius keeps clipping
+  // the corners while the inset animates.
+  gsap.fromTo(
+    asset || panel,
     { clipPath: 'inset(100% 0% 0% 0%)' },
     {
       clipPath: 'inset(0% 0% 0% 0%)',
       duration: MOTION.dur,
       ease: MOTION.ease,
+      delay: 0.12,
       scrollTrigger: { trigger: el, start: 'top 85%', once: true },
     },
   );

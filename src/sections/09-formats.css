@@ -1,4 +1,4 @@
-/* --- 05 WHAT WE RUN ------------------------------------------------------- */
+/* --- 09 WHAT WE RUN ------------------------------------------------------- */
 
 .fmt__grid {
   display: grid;
@@ -68,7 +68,7 @@
 /* Shown when no image file has loaded — the stack is empty and this is the
    ground behind it. */
 .fmt__frame::after {
-  content: 'FORMAT PHOTOGRAPHY PENDING';
+  content: '';
   position: absolute;
   inset: 0;
   display: grid;

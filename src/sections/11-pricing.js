@@ -1,5 +1,5 @@
 /* ============================================================================
-   10 PRICING — STATIC BY DESIGN.
+   11 PRICING — STATIC BY DESIGN.
    Readers are comparing tiers side by side and screenshotting to forward
    internally. Motion fights both. One opacity fade on the whole block on
    entry, and nothing else: no stagger, no y, no per-card animation, no hover
@@ -11,7 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { pricing } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
-import './10-pricing.css';
+import './11-pricing.css';
 
 function tierCard(tier) {
   return `
@@ -43,7 +43,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: pricing.label, index: 10, heading: pricing.heading })}
+      ${sectionHead({ label: pricing.label, index: 11, heading: pricing.heading })}
 
       <div class="pricing__grid">
         ${pricing.tiers.map(tierCard).join('')}

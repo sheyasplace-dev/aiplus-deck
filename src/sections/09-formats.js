@@ -1,5 +1,5 @@
 /* ============================================================================
-   05 WHAT WE RUN — formats as a hairline-divided list.
+   09 WHAT WE RUN — formats as a hairline-divided list.
    Hovering a row swaps a sticky preview beside it. The preview is a fixed
    frame with the images stacked and crossfaded on opacity alone, so nothing
    in the list moves and no layout is disturbed by a pointer.
@@ -9,7 +9,7 @@ import { gsap } from 'gsap';
 import { formats } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
-import './05-formats.css';
+import './09-formats.css';
 
 function row(f, i) {
   return `
@@ -40,7 +40,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: formats.label, index: 5 })}
+      ${sectionHead({ label: formats.label, index: 9 })}
       <div class="fmt__grid">
         <ul class="fmt__list">${formats.items.map(row).join('')}</ul>
         <div class="fmt__preview">

@@ -151,7 +151,7 @@ export const formats = {
       'One day, one room. Main stage keynotes, deep dives and fireside ' +
       'conversations with the teams pushing the technical frontier, plus ' +
       'innovation sessions with demos and live product launches.',
-    image: '/media/format-renaissance.jpg',                             // [T]
+    image: '/media/images/format-renaissance.jpg',                      // [V]
   },
   {
     name: 'Multimodal Day',                                             // [V]
@@ -255,7 +255,7 @@ export const speakers = [
   { name: 'Karan Vaidya',         title: 'Co-founder',              company: 'Composio' },
   { name: 'Andrew Dai',           title: 'Research Director',       company: 'Gemini' },
   { name: 'Sudheesh Nair',        title: 'Co-founder, CEO',         company: 'TinyFish' },
-  { name: 'Nishkarsh Srivastava', title: 'Founder, CEO',            company: 'Cortex' },
+  { name: 'Nishkarsh Srivastava', title: 'Founder, CEO',            company: 'HydraDB' },
   { name: 'Emily Xue',            title: 'Head of Enterprise AI',   company: 'Scale AI' },
   { name: 'Ankur Bhatt',          title: 'Head of AI',              company: 'Rippling' },
   { name: 'Nathan Xu',            title: 'Co-founder, CEO',         company: 'PLAUD' },
@@ -278,22 +278,112 @@ export const speakers = [
   { name: 'Paula Vivas',          title: 'Head of US Marketing',    company: 'Freepik' },
 ]; // [V] all 40, verbatim from the official speakers page
 
-// Companies represented on stage. Wordmarks render as type until [T] SVG logos
-// are added at public/media/logos/<slug>.svg.
+// Companies in the room. `domain` is the logo lookup key.
+//
+// Each company resolves to public/media/logos/<domain>.png, fetched once by
+// `node scripts/fetch-logos.mjs`. No file → the name renders as a wordmark, so
+// the wall is never broken and never has a gap.
+//
+// To use a hand-made vector instead, add `logo: 'name.svg'` to that company
+// and drop the file in the same folder.
 export const companies = [                                              // [V]
-  'Google DeepMind', 'Replit', 'Scale AI', 'Salesforce', 'Cisco', 'Accenture',
-  'ElevenLabs', 'Neo4j', 'Rippling', 'WorkOS', 'Windsurf', 'Arize AI',
-  'Parallel Web Systems', 'The Linux Foundation', 'Composio', 'MindsDB',
-  'Genspark', 'Assembled', 'Tavus', 'Wispr Flow', 'Delve', 'AGI, Inc.',
-  'Minimax', 'PLAUD', 'TinyFish', 'Smallest.ai', 'Entelligence.AI', 'CloudMile',
-  'Cortex', 'Eragon', 'Flint', 'TheAgentic', 'Freepik', 'Samsung NEXT',
-  'Hat-Trick Capital', 'Striker VC',
+  { name: 'Google DeepMind',      domain: 'deepmind.google' },
+  { name: 'Replit',               domain: 'replit.com' },
+  { name: 'Scale AI',             domain: 'scale.com' },
+  { name: 'Salesforce',           domain: 'salesforce.com' },
+  { name: 'Cisco',                domain: 'cisco.com' },
+  { name: 'Accenture',            domain: 'accenture.com' },
+  { name: 'ElevenLabs',           domain: 'elevenlabs.io' },
+  { name: 'Neo4j',                domain: 'neo4j.com' },
+  { name: 'Rippling',             domain: 'rippling.com' },
+  { name: 'WorkOS',               domain: 'workos.com' },
+  { name: 'Windsurf',             domain: 'windsurf.com' },
+  { name: 'Andreessen Horowitz',  domain: 'a16z.com' },
+  { name: 'Parallel Web Systems', domain: 'parallel.ai' },
+  { name: 'The Linux Foundation', domain: 'linuxfoundation.org' },
+  { name: 'Composio',             domain: 'composio.dev' },
+  { name: 'MindsDB',              domain: 'mindsdb.com' },
+  { name: 'Genspark',             domain: 'genspark.ai' },
+  { name: 'Assembled',            domain: 'assembled.com' },
+  { name: 'Tavus',                domain: 'tavus.io' },
+  { name: 'Wispr Flow',           domain: 'wisprflow.ai' },
+  { name: 'Delve',                domain: 'getdelve.com' },
+  { name: 'AGI, Inc.',            domain: 'agi.inc' },
+  { name: 'Minimax',              domain: 'minimax.io' },
+  { name: 'PLAUD',                domain: 'plaud.ai' },
+  { name: 'TinyFish',             domain: 'tinyfish.ai' },
+  { name: 'Smallest.ai',          domain: 'smallest.ai' },
+  { name: 'Entelligence.AI',      domain: 'entelligence.ai' },
+  { name: 'CloudMile',            domain: 'mile.cloud' },
+  { name: 'Flint',                domain: 'flintk12.com' },
+  { name: 'TheAgentic',           domain: 'theagentic.ai' },
+  { name: 'Freepik',              domain: 'freepik.com' },
+  { name: 'Samsung NEXT',         domain: 'samsungnext.com' },
+  { name: 'NVIDIA',               domain: 'nvidia.com' },
+  { name: 'Rho',                  domain: 'rho.co' },
+  { name: 'Fireworks AI',         domain: 'fireworks.ai' },
+  { name: 'Bespoke Labs',         domain: 'bespokelabs.ai' },
+  { name: 'LangChain',            domain: 'langchain.com' },
+  // Domains below were not confirmed against the speaker list, so they are
+  // marked so no possibly-unrelated mark is ever fetched for them. Confirm the
+  // domain and delete `unconfirmed` to let a logo load.
+  { name: 'HydraDB',              domain: 'hydradb.com',          unconfirmed: true },
+  { name: 'Eragon',               domain: 'eragon.ai',            unconfirmed: true },
+  { name: 'Emergence Capital',    domain: 'emcap.com',            unconfirmed: true },
 ];
 
+/* --- 08 SPEAKERS — scroll marquee ---------------------------------------- */
+// A horizontal gallery of portraits drawn from the `speakers` array above, so
+// there is one speaker list on the site and no chance of the two disagreeing.
+//
+// `feature` picks which of the 40 appear here. A rail of all 40 would run to
+// roughly 13,000px and swallow the middle of the page; 07 already shows the
+// full set as a dense grid, and this section is the close-up. Add or remove
+// names to change the cut — with none flagged it falls back to all 40.
+export const speakerShowcase = {
+  label: 'SPEAKERS',
+  heading: ['The people who have', 'stood on our stage.'],
+  scrollLabel: 'SCROLL',
+  feature: [                                                            // [V]
+    'Parag Agrawal',
+    'Michele Catasta',
+    'Matt White',
+    'Jeff Wang',
+    'Michael Grinich',
+    'Emily Xue',
+    'Andrew Dai',
+    'Philip Rathle',
+    'Shaheen Lavie-Rouse',
+    'Linda Sheng',
+    'Aiswarya Sankar',
+    'Hassaan Raza',
+  ],
+  // [T] Portraits go at public/media/speakers/<slug>.jpg, slug derived from the
+  // name — e.g. parag-agrawal.jpg. Shoot or source at 3:4, min 900px wide.
+  // Missing files fall back to a labelled placeholder card.
+};
+
 export const proof = {
-  label: 'PROOF',
-  // The line the grid resolves into. Counts are [D] from the two arrays above.
-  resolve: ['40 SPEAKERS', '36 COMPANIES', '2,000 IN THE ROOM'],
+  label: 'ECOSYSTEM',
+  heading: 'Companies we have worked with.',
+  // The line the wall resolves into. Counts are [D] — 41 is companies.length
+  // and 40 is speakers.length. Recount if you edit either array.
+  resolve: ['41+ COMPANIES', '40+ SPEAKERS', '2,000+ PEOPLE CONNECTED'],
+  footnote: '',
+
+  logos: {
+    // Marks are self-hosted in public/media/logos/, fetched once by
+    // `node scripts/fetch-logos.mjs`. Re-run it after adding companies.
+    //
+    // Remote lookup stays off: it would mean third-party requests firing from
+    // a page you send cold to sponsors, and every free logo API either needs a
+    // key or has been shut down. Leave this false unless you have a key.
+    useRemote: false,
+    remote: [],
+    // Anything resolving smaller than this is rejected — an upscaled 16px
+    // favicon in a 32px slot looks worse than the wordmark.
+    minPx: 32,
+  },
 };
 
 /* --- 08 WHO'S IN THE ROOM — most important section ----------------------- */
@@ -305,7 +395,7 @@ export const audience = {
   // publishes no audience breakdown. This is the most load-bearing evidence on
   // the page and the first thing a sponsor will interrogate. Export the real
   // split from your RenAIssance 2026 registration data before sending.
-  source: '[U] PLACEHOLDER — REPLACE WITH RENAISSANCE 2026 REGISTRATION DATA',
+  source: '',
   breakdowns: [
     {
       title: 'By role',
@@ -507,4 +597,4 @@ export const close = {
 };
 
 /* --- Section labels for the 01/12 counters ------------------------------- */
-export const sectionCount = 12;
+export const sectionCount = 13;

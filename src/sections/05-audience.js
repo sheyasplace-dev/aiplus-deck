@@ -1,5 +1,5 @@
 /* ============================================================================
-   08 WHO'S IN THE ROOM — the section the cheque turns on.
+   05 WHO'S IN THE ROOM — the section the cheque turns on.
    Three breakdowns share one canvas dot field: 2,000 dots, one per attendee,
    morphing between an unsorted cloud, a single ring, and clusters resolved by
    segment. Engine in lib/particles.js; this file is layout and controls.
@@ -11,7 +11,7 @@ import { MOTION } from '../lib/motion.js';
 import { countUp, setValue } from '../lib/countup.js';
 import { sectionHead } from '../lib/section.js';
 import { ParticleField, autoCycle } from '../lib/particles.js';
-import './08-audience.css';
+import './05-audience.css';
 
 const V = audience.viz;
 
@@ -22,7 +22,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: audience.label, index: 8, heading: audience.heading })}
+      ${sectionHead({ label: audience.label, index: 5, heading: audience.heading })}
       <p class="aud__source caption">${audience.source}</p>
 
       <div class="aud__viz">
@@ -46,7 +46,7 @@ function render() {
       <div class="aud__logos">
         <p class="aud__logos-label data mute">${audience.logosLabel}</p>
         <ul class="aud__logo-list">${companies
-          .map((c) => `<li class="aud__logo data">${c}</li>`).join('')}</ul>
+          .map((c) => `<li class="aud__logo data">${c.name}</li>`).join('')}</ul>
       </div>
     </div>
   `;

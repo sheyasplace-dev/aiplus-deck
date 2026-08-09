@@ -1,83 +1,102 @@
-/* --- 07 PROOF WALL -------------------------------------------------------- */
+/* --- 07 PROOF — logo wall ------------------------------------------------- */
 
 .proof { background: var(--surface); }
 
+/* 41 cards have to share one pinned viewport with the header, so the chrome
+   around the grid is kept deliberately tight — the wall is the section. */
 .pw__stage {
   position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--s5);
-  padding-block: var(--s6);
+  gap: var(--s4);
+  padding-block: var(--s4);
   overflow: hidden;
 }
 
-.pw__head .s-head { margin-bottom: 0; }
+.pw__head .s-head { margin-bottom: var(--s3); }
+
+.pw__head-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  flex-wrap: wrap;
+}
+
+.pw__heading {
+  max-width: 20ch;
+  margin-left: -0.015em;
+}
 
 /* --- Grid ----------------------------------------------------------------
-   Auto-fill keeps the wall dense at any width; 76 cells reflow from about 14
-   columns down to 5 without any breakpoint of their own.                   */
+   Cards, not tiles. Sized so 41 of them still fit one pinned viewport: the
+   track and the card height both scale with the window rather than sitting
+   at fixed pixels, which is what keeps the wall on one screen from a laptop
+   up to a large display.                                                   */
 .pw__grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  gap: var(--s2);
+  grid-template-columns: repeat(auto-fill, minmax(clamp(104px, 9.6vw, 152px), 1fr));
+  gap: clamp(6px, 0.7vw, 12px);
 }
 
 .pw__cell {
-  aspect-ratio: 1;
-  border-radius: 8px;
+  height: clamp(84px, 13vh, 128px);
+  background: var(--paper);
+  border: var(--hairline);
+  border-radius: var(--radius);
+  padding: clamp(8px, 1vw, 14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 0.9vh, 12px);
   overflow: hidden;
-  position: relative;
-  display: grid;
-  place-items: center;
   will-change: transform, opacity;
 }
 
-/* Faces: headshot when the file exists, initials when it does not. */
-.pw__cell--face {
-  background: var(--paper);
-  border: var(--hairline);
-}
-
-.pw__initials {
-  font-family: var(--font-body);
-  font-size: var(--t-data);
-  font-weight: 500;
-  letter-spacing: var(--t-data-track);
-  color: var(--ink-mute);
-}
-
-.pw__cell--face img {
-  position: absolute;
-  inset: 0;
+/* --- Mark ----------------------------------------------------------------
+   The mark leads the card and the name supports it, so the slot gets roughly
+   twice the height of the caption. Height is reserved whether or not an image
+   resolves, so a wall that is part logo and part wordmark still lines up row
+   to row.                                                                  */
+.pw__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(28px, 4.6vh, 46px);
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-/* Wordmarks: no logo files yet, so the company name is set as type. Reads as
-   deliberate rather than missing, and stays on palette. */
-.pw__cell--logo {
-  background: var(--blue-soft);
-  padding: 4px;
+.pw__logo img {
+  max-height: 100%;
+  max-width: 86%;
+  object-fit: contain;
+  display: none;
+  /* Several of these marks are solid-ground squares. A small radius stops
+     them reading as unclipped screenshots against the white card. */
+  border-radius: 5px;
 }
 
-.pw__cell--logo span {
+.pw__logo img.is-on { display: block; }
+
+.pw__name {
   font-family: var(--font-body);
-  font-size: 0.5rem;
+  font-size: clamp(0.56rem, 0.66vw, 0.72rem);
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   text-align: center;
-  color: var(--ink);
-  overflow: hidden;
+  color: var(--ink-mute);
+  text-wrap: pretty;
 }
 
-/* --- The resolve ---------------------------------------------------------
-   Sits over the receded grid, centred on the stage.                       */
+/* With no mark loaded the name carries the card, so it takes the ink. */
+.pw__cell:not(:has(img.is-on)) .pw__name { color: var(--ink); }
+
+/* --- The resolve ---------------------------------------------------------- */
 .pw__resolve {
   position: absolute;
   left: 0;
@@ -97,9 +116,15 @@
 
 .pw__dot { color: var(--blue); }
 
+.pw__foot { opacity: 0.7; }
+
 /* --- Static / reduced motion ---------------------------------------------
-   No pin, no assembly. The wall and the claim both simply exist, with the
-   grid pushed back so the line stays readable over it.                    */
+   No pin, no assembly. The wall and the claim both simply exist.          */
+.proof--static .pw__stage {
+  min-height: 0;
+  padding-block: var(--section-pad);
+}
+
 .proof--static .pw__resolve {
   position: static;
   transform: none;
@@ -107,7 +132,8 @@
 }
 
 @media (max-width: 640px) {
-  .pw__grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
+  .pw__grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
   .pw__resolve { gap: var(--s2); flex-direction: column; }
   .pw__dot { display: none; }
+  .pw__foot { display: none; }
 }

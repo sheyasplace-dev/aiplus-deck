@@ -1,10 +1,23 @@
 /* --- 02 THE ROOM ---------------------------------------------------------- */
 
-/* Genuinely edge to edge — no gutter, no radius, no max-width. Coming
-   straight off a hero that is type on white, the full width is the contrast. */
+/* Still the full width of the page — no max-width, no gutter. The only inset
+   is the hair of margin the rounded corners need to read as corners, so the
+   photo keeps the scale it had when this ran edge to edge. */
 .section-bleed {
   width: 100%;
   margin-block: var(--section-pad);
+  padding-inline: var(--s3);
+}
+
+/* Outer panel. Radius one step above the card token so the inner frame's
+   16px sits concentrically inside it rather than fighting it. The mat is
+   deliberately thin — it exists to separate photo from page, not to shrink
+   the photo. */
+.room__panel {
+  background: var(--surface);
+  border: var(--hairline);
+  border-radius: calc(var(--radius) + var(--s2));
+  padding: var(--s3);
 }
 
 .room__frame {
@@ -12,6 +25,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -28,8 +42,8 @@
    stays inside the palette — no scrims, no gradients.                      */
 .room__caption {
   position: absolute;
-  left: var(--gutter);
-  bottom: var(--gutter);
+  left: var(--s4);
+  bottom: var(--s4);
   background: var(--paper);
   color: var(--ink);
   padding: 10px 16px;
@@ -38,7 +52,7 @@
 
 /* --- No asset yet --------------------------------------------------------- */
 .room--placeholder .room__frame {
-  border-block: var(--hairline);
+  border: var(--hairline);
 }
 
 .room--placeholder .room__frame::after {
@@ -61,7 +75,9 @@
   /* Still narrower than 16:9 so the frame has presence on a phone, but not
      the 4:5 a portrait crop would want — this is a wide stage shot and a tall
      crop throws away the panel and the room either side of it. */
-  .room__frame { aspect-ratio: 3 / 2; }
+  .room__panel { padding: var(--s2); border-radius: var(--radius); }
+  .room__frame { aspect-ratio: 3 / 2; border-radius: 12px; }
+  .section-bleed { padding-inline: var(--s2); }
   .room__caption {
     left: var(--s3);
     right: var(--s3);

@@ -1,0 +1,159 @@
+/* --- 08 SPEAKERS — scroll marquee ----------------------------------------- */
+
+.spk { background: var(--paper); }
+
+.spk__pin {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s5);
+  padding-block: var(--s6) var(--s5);
+  overflow: hidden;
+}
+
+.spk__head .s-head { margin-bottom: var(--s4); }
+
+.spk__heading {
+  max-width: 20ch;
+  margin-left: -0.015em;
+}
+
+/* --- Rail ----------------------------------------------------------------
+   Opens at the page gutter and runs off the right edge; the overflow is the
+   affordance. `touch-action: pan-y` keeps vertical page scroll native on a
+   phone while the pointer handler takes horizontal drags.                  */
+.spk__viewport {
+  padding-left: var(--gutter);
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.spk__viewport:active { cursor: grabbing; }
+
+.spk__track {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(20px, 3vw, 36px);
+  width: max-content;
+  will-change: transform;
+}
+
+/* --- Card ----------------------------------------------------------------- */
+.spk__card {
+  flex: 0 0 auto;
+  width: min(300px, 26vw);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  will-change: transform, opacity;
+}
+
+.spk__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: 42vh;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.spk__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spk__frame.is-empty::after {
+  content: 'PORTRAIT · 3:4';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: var(--t-data);
+  font-weight: 500;
+  letter-spacing: var(--t-data-track);
+  color: var(--ink-mute);
+}
+
+/* --- Meta ----------------------------------------------------------------- */
+.spk__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.spk__name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  letter-spacing: var(--t-display-track);
+}
+
+.spk__rule {
+  display: block;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* The company is the only blue on the card — it is what a sponsor is
+   scanning for, and it does the work a logo would if we had the files. */
+.spk__co { color: var(--blue); }
+
+/* --- Progress ------------------------------------------------------------- */
+.spk__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+}
+
+.spk__rail {
+  position: relative;
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--rule);
+}
+
+.spk__fill {
+  position: absolute;
+  inset: -1px 0 0;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.spk__count { font-variant-numeric: tabular-nums; }
+
+/* --- Static / reduced motion ---------------------------------------------
+   No pin and no rail. The cards become a grid so every speaker is reachable
+   without a gesture.                                                       */
+.spk--static .spk__pin {
+  height: auto;
+  padding-block: var(--section-pad);
+}
+
+.spk--static .spk__viewport {
+  padding-inline: var(--gutter);
+  overflow: visible;
+  cursor: auto;
+}
+
+.spk--static .spk__track {
+  width: 100%;
+  max-width: var(--maxw);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s5) var(--grid-gap);
+}
+
+.spk--static .spk__card { width: 100%; }
+.spk--static .spk__bar { display: none; }
+
+@media (max-width: 899px) {
+  .spk__card { width: min(70vw, 300px); }
+  .spk__frame { max-height: none; }
+}

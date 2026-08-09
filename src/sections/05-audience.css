@@ -1,4 +1,4 @@
-/* --- 08 WHO'S IN THE ROOM -------------------------------------------------
+/* --- 05 WHO'S IN THE ROOM -------------------------------------------------
    The most important section, given the most room: 1.4× section padding.   */
 
 .audience { padding-block: calc(var(--section-pad) * 1.4); }
@@ -91,12 +91,14 @@
   min-width: 0;
 }
 
+/* Sits on the page ground, not a panel. The dots are the only thing in the
+   frame; a --surface plate around them reads as a chart widget and boxes in
+   an animation whose whole point is that it is not contained. */
 .aud__frame {
   position: relative;
   width: 100%;
   aspect-ratio: 1.35 / 1;
-  background: var(--surface);
-  border-radius: var(--radius);
+  background: var(--paper);
   overflow: hidden;
 }
 

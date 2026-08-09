@@ -1,5 +1,5 @@
 /* ============================================================================
-   12 CLOSE — last screen. Back on white, mirroring the hero, so the page ends
+   13 CLOSE — last screen. Back on white, mirroring the hero, so the page ends
    where it started and the evidence in between reads as the middle of an
    argument rather than a scroll of assets.
    ============================================================================ */
@@ -8,7 +8,7 @@ import { gsap } from 'gsap';
 import { brand, close } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { maskLines, setLinesHidden, revealLines, revealUp } from '../lib/reveal.js';
-import './12-close.css';
+import './13-close.css';
 
 /**
  * Google Calendar template link. Returns null unless a real start date exists —
