@@ -108,6 +108,11 @@
   position: relative;
 }
 
+/* Emphasis inside a deliverable line. Inter 500 is the type system's weight for
+   figures — 700 would be the first bold on the page and would out-shout the
+   tier price sitting directly above it. */
+.tier__item strong { font-weight: 500; }
+
 .tier__item::before {
   content: '';
   position: absolute;

@@ -559,8 +559,11 @@ export const pricing = {
       unit: 'PER EDITION',
       summary: 'You host. We fill the room and promote the event better.',
       includes: [                                                       // [U] all
-        'Listed and promoted on our Luma — 70,000+ followers',
-        'Featured in On the Record, our newsletter — 43,000+ subscribers',
+        // <strong> is the one tag allowed in a deliverable line. It sets Inter
+        // 500 — the weight the type system reserves for figures — so the number
+        // carries without reaching for a bold the palette does not have.
+        'Listed and promoted on our Luma — <strong>70,000+ followers</strong>',
+        'Featured in On the Record, our newsletter — <strong>43,000+ subscribers</strong>',
         'Pushed through our community WhatsApp groups and social channels',
         'Help attracting attendees through your own network and channels',
         'Pricing depends on the size of the room and the number of co-hosts. Reach out for a quote.',
