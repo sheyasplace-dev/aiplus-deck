@@ -65,7 +65,7 @@ export const hero = {
     '50,000+ founders, researchers and investors building and experimenting with AI, ' +
     'One community they all came back to.',
   ctaPrimary: { label: 'Book a call', href: BOOKING },
-  ctaSecondary: { label: 'See the rate card', href: '#pricing' },
+  ctaSecondary: { label: 'Partnership Tiers', href: '#pricing' },
   // Four-up strip along the fold. Keep to four; five crowds at 1280px.
   strip: [
     { value: '50,000+', label: 'Members' },                             // [V]
@@ -88,7 +88,7 @@ export const statement = {
     'Once a year we get everyone in one place in San Francisco — ' +
     'the people building the models, the people building on top of them, ' +
     'and the people funding both. This year that was 2,000 people and ' +
-    '30+ speakers. 2027 is bigger.',
+    '30+ speakers. 2027 we go bigger.',
   // This section is the evidence, not the ask — both CTAs send the reader to
   // the event itself and let it make the argument. The booking CTAs in 01 and
   // 12 carry the ask.
@@ -711,7 +711,7 @@ export const close = {
   // link. Everything below is a placeholder and MUST be replaced.
   date: ' RENAISSANCE 2027 · DATE - March, 2027',
   venue: 'VENUE TBC · SAN FRANCISCO',
-  body: 'Twenty minutes is enough to tell you whether your audience is in this room.',
+  body: 'Tell me what you\'re trying to pull off and I\'ll tell you honestly whether we\'re the right room for it.',
   ctaPrimary: { label: 'Book a call', href: BOOKING },
   ctaSecondary: { label: 'team@aiplus.dev', href: 'mailto:team@aiplus.dev' },
 
