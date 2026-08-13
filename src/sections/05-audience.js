@@ -6,14 +6,34 @@
    ============================================================================ */
 
 import { gsap } from 'gsap';
-import { audience, companies } from '../data/content.js';
+import { audience } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { countUp, setValue } from '../lib/countup.js';
+import { revealMasked, revealUp } from '../lib/reveal.js';
 import { sectionHead } from '../lib/section.js';
 import { ParticleField, autoCycle } from '../lib/particles.js';
 import './05-audience.css';
 
 const V = audience.viz;
+const T = audience.themes;
+
+// The cloud reads on two channels, both derived from the counts rather than
+// authored per item: size ramps linearly across the range, and the louder half
+// takes --ink while the quieter half drops to --ink-mute. No third grey.
+const COUNTS = T.items.map((t) => t.count);
+const [MIN, MAX] = [Math.min(...COUNTS), Math.max(...COUNTS)];
+const MEDIAN = [...COUNTS].sort((a, b) => a - b)[COUNTS.length >> 1];
+
+function theme(t) {
+  const scale = MAX === MIN ? 1 : (t.count - MIN) / (MAX - MIN);
+  return `
+    <li class="thm__item${t.count >= MEDIAN ? ' is-loud' : ''}"
+        style="--t:${scale.toFixed(3)}" data-count="${t.count}">
+      <span class="thm__inner"><span class="thm__name display">${t.label}</span
+        ><span class="thm__count data">${t.count}</span></span>
+    </li>
+  `;
+}
 
 function render() {
   const el = document.createElement('section');
@@ -43,10 +63,10 @@ function render() {
         </div>
       </div>
 
-      <div class="aud__logos">
-        <p class="aud__logos-label data mute">${audience.logosLabel}</p>
-        <ul class="aud__logo-list">${companies
-          .map((c) => `<li class="aud__logo data">${c.name}</li>`).join('')}</ul>
+      <div class="aud__themes">
+        <p class="thm__label data mute">${T.label}</p>
+        <ul class="thm__cloud">${T.items.map(theme).join('')}</ul>
+        <p class="thm__footnote data mute">${T.footnote}</p>
       </div>
     </div>
   `;
@@ -112,12 +132,22 @@ export function init(mount, staticMode) {
   new IntersectionObserver(([e]) => (e.isIntersecting ? field.start() : field.stop()),
     { rootMargin: '200px' }).observe(el.querySelector('.aud__frame'));
 
-  gsap.fromTo(el.querySelectorAll('.aud__logo'),
-    { y: MOTION.y, opacity: 0 },
-    {
-      y: 0, opacity: 1, duration: MOTION.dur, ease: MOTION.ease, stagger: 0.02,
-      scrollTrigger: { trigger: el.querySelector('.aud__logos'), start: 'top 82%', once: true },
-    });
-
+  revealThemes(el);
   return el;
+}
+
+/* --- Themes entrance -------------------------------------------------------
+   The cloud arrives in count order — loudest first, down to the quiet ones —
+   so the hierarchy is stated by the sequence before a single size has been
+   read. Label leads, footnote lands last.                                   */
+function revealThemes(el) {
+  const items = [...el.querySelectorAll('.thm__item')]
+    .sort((a, b) => b.dataset.count - a.dataset.count);
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: el.querySelector('.aud__themes'), start: 'top 78%', once: true },
+  });
+
+  revealUp(tl, el.querySelector('.thm__label'), 0);
+  revealMasked(tl, items, items.map((i) => i.querySelector('.thm__inner')), 0.15);
+  revealUp(tl, el.querySelector('.thm__footnote'), '-=0.7');
 }

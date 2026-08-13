@@ -1,0 +1,105 @@
+/* --- ENQUIRY FORM PAGE ---------------------------------------------------
+   Same tokens, same type classes, same hairline surface as the microsite. No
+   shadows, no gradients, no colour outside the seven.                      */
+
+.enquiry { padding-block: clamp(64px, 10vh, 140px); }
+
+.enquiry__wrap {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.enquiry__back {
+  display: inline-block;
+  margin-bottom: var(--s6);
+  color: var(--ink-mute);
+}
+.enquiry__back:hover { color: var(--blue); }
+
+.enquiry__meta {
+  padding-bottom: var(--s4);
+  border-bottom: var(--hairline);
+  margin-bottom: var(--s5);
+}
+
+.enquiry__heading { margin-bottom: var(--s4); margin-left: -0.015em; }
+
+.enquiry__body { margin-bottom: var(--s6); }
+
+/* --- Selected tier, carried in on ?tier= --------------------------------- */
+.enquiry__tier {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--blue-soft);
+  margin-bottom: var(--s5);
+}
+.enquiry__tier-value { color: var(--blue); }
+
+/* --- Fields --------------------------------------------------------------- */
+.enquiry__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.field { display: flex; flex-direction: column; gap: var(--s2); }
+
+.field__label { color: var(--ink-mute); }
+
+.field__input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--hairline);
+  border-radius: var(--radius);
+  padding: 14px var(--s3);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.field__input::placeholder { color: var(--ink-mute); }
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+textarea.field__input { resize: vertical; min-height: 9rem; }
+
+/* Validation message. Blue rather than a new colour — the palette has no red,
+   and inventing one for this would break Rule 3. */
+.field__error {
+  color: var(--blue);
+  min-height: 1.2em;
+}
+.field__error:empty { display: none; }
+
+.field--invalid .field__input { border-color: var(--blue); }
+
+.enquiry__submit { align-self: flex-start; }
+.enquiry__submit[disabled] { opacity: 1; cursor: default; background: var(--ink-mute); }
+
+.enquiry__note { margin-top: var(--s3); }
+.enquiry__note:empty { display: none; }
+
+/* --- Post-submit ---------------------------------------------------------- */
+.enquiry__done {
+  padding: var(--s5);
+  border: var(--hairline);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.enquiry__done-heading { margin-bottom: var(--s3); }
+.enquiry__done-body { margin-bottom: var(--s5); }
+
+@media (max-width: 600px) {
+  .enquiry__submit { align-self: stretch; justify-content: center; }
+}

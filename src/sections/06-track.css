@@ -81,6 +81,14 @@
 
 .rail__detail { grid-column: 1 / -1; }
 
+/* Only the cards with a `link` in content.js get one, so the row height varies.
+   `justify-self: start` keeps the rule under the words rather than stretching
+   it across the grid column. */
+.rail__link {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
 /* --- Progress ------------------------------------------------------------- */
 .rail__progress {
   margin-top: var(--s6);

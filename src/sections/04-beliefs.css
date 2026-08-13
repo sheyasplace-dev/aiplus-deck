@@ -1,51 +1,169 @@
-/* --- 04 WHY WE EXIST ------------------------------------------------------ */
+/* --- 04 WHY WE EXIST — manifesto + drifting rail -------------------------- */
 
-/* --- Top half: heading + photo left, argument right ---------------------- */
-.why__top {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--s6) var(--s8);
-  align-items: start;
-}
+.bel { background: var(--paper); }
 
-.why__heading {
-  max-width: 11ch;
-  margin-left: -0.015em;
-  margin-bottom: var(--s6);
-}
+.bel__head { padding-top: var(--section-pad); }
 
-/* --- Figure --------------------------------------------------------------- */
-.why__figure {
+/* --- Manifesto -----------------------------------------------------------
+   The outer block is the scroll length; .bel__stage is what pins inside it.
+   Height here is only the fallback — ScrollTrigger sets the real span.
+
+   The stage is opaque and sits above the rail, because the rail is pulled up
+   underneath it to close the handoff — see .bel__rail.                     */
+.bel__manifesto { position: relative; }
+
+.bel__stage {
   position: relative;
-  aspect-ratio: 16 / 9;
+  z-index: 2;
+  background: var(--paper);
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+.bel__eyebrow {
+  color: var(--blue);
+  margin-bottom: var(--s5);
+}
+
+/* Cleared in content.js — collapse rather than leave its margin behind. */
+.bel__eyebrow:empty { display: none; }
+
+/* Deliberately short of --t-d1: this is a sentence to be read at a glance,
+   not a headline to be landed on. Weight stays 300 at every size.
+
+   The measure is set to land the 22 words on three lines — wide enough that
+   it reads as three statements rather than a stack, narrow enough that the
+   eye still turns. `balance` then evens their lengths. Change the copy and
+   this measure is the thing to re-check.                                   */
+.bel__words {
+  max-width: min(48ch, 1100px);
+  font-size: clamp(1.5rem, 3.1vw, 2.75rem);
+  line-height: 1.22;
+  text-wrap: balance;
+}
+
+/* Each word is its own reveal step. The blur is written per frame by the
+   scrub; everything here is the state it resolves to. */
+.bel__w {
+  display: inline-block;
+  margin-right: 0.24em;
+  color: var(--ink-mute);
+  will-change: filter, opacity, transform;
+  transition: color var(--dur) var(--ease);
+}
+
+.bel__w.is-lit { color: var(--ink); }
+.bel__w.is-accent,
+.bel__w.is-accent.is-lit { color: var(--blue); }
+
+.bel__cue { margin-top: var(--s6); }
+
+/* --- Rail ----------------------------------------------------------------
+   Pulled up under the stage. Both blocks centre their content in a full
+   screen, so back to back they hand over through a screen of white: the
+   stage's empty lower half, then the rail's empty upper half. Overlapping
+   them by a third of a viewport removes most of it — the stage is opaque and
+   on top, so all this changes is how soon the rail reaches its own pin.    */
+.bel__rail {
+  position: relative;
+  z-index: 1;
+  margin-top: -32svh;
+}
+
+/* position: relative so the progress rule is measured against the pin in every
+   state, not only while ScrollTrigger has it fixed. The bottom padding keeps
+   the cards centred above that rule rather than through it. */
+.bel__pin {
+  position: relative;
+  background: var(--paper);
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-bottom: var(--s6);
+  overflow: hidden;
+}
+
+/* The viewport clips horizontally — that is the whole point of the rail — but
+   its box is only as tall as the undrifted track, so a card pushed down by
+   --drift has its foot cut off by the same overflow. The vertical padding is
+   the slack that drift moves into, and it must stay larger than the largest
+   --drift below. There is no overflow-x-only that would do this: mixing
+   hidden and visible computes to auto, which would add a scrollbar. */
+.bel__viewport {
+  width: 100%;
+  padding-block: 9vh;
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.bel__viewport:active { cursor: grabbing; }
+
+.bel__track {
+  display: flex;
+  align-items: center;
+  gap: 9vw;
+  padding-inline: 12vw;
+  width: max-content;
+  will-change: transform;
+}
+
+/* --- Card ----------------------------------------------------------------
+   Four sizes and four vertical offsets, fixed per position. The drift is what
+   stops the rail reading as a row of equal cards; --s is the centre-focus
+   scale, written per frame, and is composed here so the offset survives it.
+
+   Frame height and drift are budgeted against two clips — the viewport's and
+   the pin's. Tallest frame + tallest caption + the viewport's 9vh of padding
+   has to fit inside 100svh, and no --drift may exceed that padding. Card 02
+   is the binding case at both: tallest ratio, largest downward drift. Raise
+   any of these three numbers and check that card first.                    */
+.bel__card {
+  flex: 0 0 auto;
+  transform: translateY(var(--drift, 0)) scale(var(--s, 1));
+  will-change: opacity, transform;
+}
+
+.bel__card:nth-child(1) { width: min(420px, 62vw); --drift: -4vh; }
+.bel__card:nth-child(2) { width: min(320px, 52vw); --drift: 7vh; }
+.bel__card:nth-child(3) { width: min(380px, 58vw); --drift: -7vh; }
+.bel__card:nth-child(4) { width: min(440px, 64vw); --drift: 4vh; }
+
+.bel__frame {
+  position: relative;
+  width: 100%;
+  max-height: min(38vh, 420px);
   overflow: hidden;
   border-radius: var(--radius);
-  background: var(--paper);
-  border: var(--hairline);
+  background: var(--surface);
 }
 
-.why__figure img {
+.bel__card:nth-child(1) .bel__frame { aspect-ratio: 4 / 3; }
+.bel__card:nth-child(2) .bel__frame { aspect-ratio: 3 / 4; }
+.bel__card:nth-child(3) .bel__frame { aspect-ratio: 1 / 1; }
+.bel__card:nth-child(4) .bel__frame { aspect-ratio: 16 / 10; }
+
+.bel__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.why__figcap {
-  position: absolute;
-  left: var(--s3);
-  bottom: var(--s3);
-  background: var(--paper);
-  color: var(--ink);
-  padding: 8px 14px;
-  border-radius: 999px;
-}
-
-.why__figure.is-empty::after {
-  content: '[ ROOM SHOT · 16:9 ]';
+/* Missing photo: the house placeholder — flat ground and the brief for the
+   shot, written in content.js and read off the data attribute. */
+.bel__frame.is-empty::after {
+  content: attr(data-note);
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  padding: var(--s4);
+  text-align: center;
   font-family: var(--font-body);
   font-size: var(--t-data);
   font-weight: 500;
@@ -53,88 +171,79 @@
   color: var(--ink-mute);
 }
 
-/* --- Right column --------------------------------------------------------- */
-.why__right {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s5);
+.bel__cap {
+  padding-top: var(--s4);
+  max-width: 34ch;
 }
 
-/* The two labels are the only blue in the top half — they carry the reading
-   order, so they earn it. The themes label stays muted so it reads as a
-   caption on the rail rather than a third beat of the argument. */
-.why__block-label {
+.bel__index {
   color: var(--blue);
   margin-bottom: var(--s3);
 }
 
-.why__block-text {
-  color: var(--ink-mute);
-  max-width: 52ch;
+.bel__title {
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  line-height: 1.25;
+  margin-bottom: var(--s2);
 }
 
-/* --- Themes rail ---------------------------------------------------------- */
-.why__themes { margin-top: var(--s3); }
-
-.why__themes-label {
-  padding-bottom: var(--s3);
-  border-bottom: var(--hairline);
-  margin-bottom: 0;
+/* --- Progress ------------------------------------------------------------- */
+.bel__progress {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--s5);
+  height: 1px;
+  background: var(--rule);
 }
 
-.why__themes-list {
-  list-style: none;
+.bel__fill {
+  display: block;
+  height: 1px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* --- Static / reduced motion ---------------------------------------------
+   No pins, no blur, no drift. The manifesto sits at full contrast and the
+   rail becomes a grid, so every card is reachable without a gesture.      */
+/* The overlap only makes sense against a pin. With no pin it would be a real
+   collision, so it is reset here. */
+.bel--static .bel__rail { margin-top: 0; }
+.bel--static .bel__stage { height: auto; padding-block: var(--section-pad); }
+.bel--static .bel__w { opacity: 1; filter: none; color: var(--ink); }
+.bel--static .bel__w.is-accent { color: var(--blue); }
+.bel--static .bel__cue { display: none; }
+
+.bel--static .bel__pin { height: auto; padding-bottom: var(--section-pad); }
+.bel--static .bel__viewport { overflow: visible; cursor: auto; }
+
+.bel--static .bel__track {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--s3);
-  padding-block: var(--s4);
-  border-bottom: var(--hairline);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--s6) var(--grid-gap);
+  align-items: start;
 }
 
-.why__theme {
-  font-size: var(--t-body);
-  line-height: 1.3;
-  color: var(--ink);
+.bel--static .bel__card,
+.bel--static .bel__card:nth-child(n) {
+  width: 100%;
+  transform: none;
+  opacity: 1;
 }
 
-/* --- Bottom row ----------------------------------------------------------
-   Pull-quote and mission on one line, divided from the argument above by a
-   full-width rule. The quote is left-aligned here rather than centred: it is
-   now in conversation with the paragraph beside it, not a standalone break. */
-.why__bottom {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--s6) var(--s8);
-  align-items: end;
-  margin-top: var(--s7);
-  padding-top: var(--s7);
-  border-top: var(--hairline);
-}
-
-.why__quote {
-  color: var(--blue);
-  max-width: 14ch;
-  margin-left: -0.015em;
-}
-
-.why__after {
-  color: var(--ink-mute);
-  max-width: 52ch;
-}
+.bel--static .bel__frame { max-height: none; aspect-ratio: 4 / 3; }
+.bel--static .bel__progress { display: none; }
 
 /* --- Responsive ----------------------------------------------------------- */
-@media (max-width: 1040px) {
-  .why__top,
-  .why__bottom {
-    grid-template-columns: 1fr;
-    gap: var(--s5);
-    align-items: start;
-  }
-  .why__heading { max-width: 16ch; margin-bottom: var(--s5); }
-  .why__bottom { margin-top: var(--s6); padding-top: var(--s6); }
-}
-
-@media (max-width: 640px) {
-  .why__themes-list { grid-template-columns: repeat(2, 1fr); gap: var(--s3) var(--s4); }
-  .why__heading { max-width: none; }
+@media (max-width: 899px) {
+  .bel__words { max-width: 26ch; font-size: clamp(1.35rem, 5.4vw, 1.9rem); }
+  .bel__track { gap: 14vw; padding-inline: 10vw; }
+  .bel__card:nth-child(n) { --drift: 0; }
+  .bel__frame { max-height: 38vh; }
 }

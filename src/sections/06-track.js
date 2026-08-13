@@ -11,7 +11,7 @@
 import { gsap } from 'gsap';
 import { trackRecord } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
-import { sectionHead } from '../lib/section.js';
+import { away, sectionHead } from '../lib/section.js';
 import './06-track.css';
 
 function card(item, i) {
@@ -25,11 +25,13 @@ function card(item, i) {
       <h3 class="rail__edition display t-d3">${item.edition}</h3>
       <p class="rail__date data">${item.date}</p>
       <p class="rail__venue caption">${item.venue}</p>
+      ${item.stat ? `
       <div class="rail__stat">
         <span class="rail__stat-value display t-d3">${item.stat}</span>
         <span class="data mute">${item.statLabel}</span>
-      </div>
+      </div>` : ''}
       <p class="rail__detail caption">${item.detail}</p>
+      ${item.link ? `<a class="rail__link link" href="${item.link}"${away(item.link)}>${trackRecord.linkLabel}</a>` : ''}
     </article>
   `;
 }

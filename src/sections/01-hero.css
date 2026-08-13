@@ -19,9 +19,32 @@
   gap: var(--s4);
 }
 
+/* --- Wordmark ------------------------------------------------------------
+   The one place on the page that leaves the type system: a mark, not copy.
+   Heavy and tightly set, with the + raised to cap height at roughly half the
+   letter size — the deck's display rules (Switzer 300, never bolder) describe
+   typography, and a logo is drawn to its own proportions.
+
+   Set from brand.mark in content.js, so a re-skin still only edits that file.
+   flex-start does the vertical alignment: with line-height 1 on both parts,
+   the symbol's top sits on the word's cap line rather than its baseline.   */
 .hero__brand {
-  font-size: var(--t-data-lg);
-  letter-spacing: var(--t-data-lg-track);
+  display: inline-flex;
+  align-items: flex-start;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.45rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--blue);
+}
+
+.hero__brand-sym {
+  font-size: 0.52em;
+  line-height: 1;
+  margin-left: 0.04em;
+  /* Optical, not metric: the cap line of Inter sits a little below the box. */
+  margin-top: 0.07em;
 }
 
 /* One CTA is enough above the fold; the bar copy is redundant on small

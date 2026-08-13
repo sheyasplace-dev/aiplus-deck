@@ -19,6 +19,13 @@
   margin-left: -0.015em;
 }
 
+/* The pin is a fixed 100svh split between head, rail and bar, so this line has
+   to stay short enough not to steal a row from the portraits. */
+.spk__sub {
+  margin-top: var(--s3);
+  max-width: 52ch;
+}
+
 /* --- Rail ----------------------------------------------------------------
    Opens at the page gutter and runs off the right edge; the overflow is the
    affordance. `touch-action: pan-y` keeps vertical page scroll native on a

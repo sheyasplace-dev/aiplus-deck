@@ -1,7 +1,14 @@
 /* --- 05 WHO'S IN THE ROOM -------------------------------------------------
    The most important section, given the most room: 1.4× section padding.   */
 
-.audience { padding-block: calc(var(--section-pad) * 1.4); }
+/* Asymmetric on purpose. The top keeps the 1.4× entrance, but the bottom is
+   short: the themes band already carries its own padding, and section 06
+   opens with a full --section-pad. Anything more leaves a void between the
+   band and TRACK RECORD instead of setting the band between the two. */
+.audience {
+  padding-top: calc(var(--section-pad) * 1.4);
+  padding-bottom: var(--s5);
+}
 
 /* Pulls up under the section head, which carries --s6 of its own bottom
    margin, so the source line reads as attached to the heading. */
@@ -114,26 +121,84 @@
    stops. The legend carries the data either way, which is why the
    percentages sit beside the canvas rather than inside it. */
 
-/* --- Companies ------------------------------------------------------------ */
-.aud__logos { padding-top: var(--s7); }
+/* --- Themes --------------------------------------------------------------
+   What the room talked about, as a weighted cloud. A band rather than a card:
+   it pulls out to the wrap edges and pads back in by the gutter, so every line
+   inside it starts on the same left edge as the section head and the legend.
+   A card would inset the type and read as misaligned with everything above.
 
-.aud__logos-label { margin-bottom: var(--s5); }
+   A full --section-pad of air above separates it from the field, which is
+   deliberately uncontained and would otherwise trail straight into it.      */
+.aud__themes {
+  margin-top: var(--section-pad);
+  margin-inline: calc(var(--gutter) * -1);
+  padding: var(--s6) var(--gutter) var(--s5);
+  background: var(--surface);
+  border-top: var(--hairline);
+  border-bottom: var(--hairline);
+}
 
-.aud__logo-list {
+/* Inside the band the rhythm tightens — the air is on the outside now. */
+.thm__label { margin-bottom: var(--s5); }
+
+.thm__cloud {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s2) var(--s3);
+  align-items: baseline;
+  gap: var(--s3) clamp(var(--s4), 3vw, var(--s5));
 }
 
-.aud__logo {
-  padding: 10px 16px;
-  border: var(--hairline);
-  border-radius: 999px;
-  color: var(--ink);
+/* --t is 0…1 across the count range, set inline per item.
+   The mask is clip-path rather than overflow:hidden — a clipped box takes its
+   baseline from its bottom edge, which would break the baseline alignment
+   holding a mixed-size row together. clip-path paints without touching
+   layout, so the row still sits on one line.                               */
+.thm__item {
+  --thm-min: clamp(1.15rem, 1.5vw, 1.5rem);
+  --thm-max: clamp(1.9rem, 3.2vw, 2.75rem);
+  font-size: calc(var(--thm-min) + (var(--thm-max) - var(--thm-min)) * var(--t));
+  line-height: 1.1;
 }
 
-/* --- Responsive ----------------------------------------------------------- */
+.thm__inner { display: inline-block; will-change: transform; }
+
+.thm__name {
+  font-size: inherit;
+  color: var(--ink-mute);
+}
+
+.thm__item.is-loud .thm__name { color: var(--ink); }
+
+/* Hangs off the top of the word at every size. */
+.thm__count {
+  margin-left: 0.3em;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+  vertical-align: super;
+}
+
+.thm__footnote {
+  margin-top: var(--s5);
+  padding-top: var(--s4);
+  border-top: var(--hairline);
+}
+
+/* --- Responsive -----------------------------------------------------------
+   Desktop closes the themes band into a card: all four borders and a radius.
+   It only half-bleeds there — out by half the gutter, padded back in by the
+   same half — so the corners stay clear of the viewport edge while the type
+   inside still lands on the section's left edge. Below 1040px it stays the
+   full-bleed band, where a card would waste width it cannot spare.         */
+@media (min-width: 1041px) {
+  .aud__themes {
+    margin-inline: calc(var(--gutter) / -2);
+    padding-inline: calc(var(--gutter) / 2);
+    border: var(--hairline);
+    border-radius: var(--radius);
+  }
+}
+
 @media (max-width: 1040px) {
   .aud__viz { grid-template-columns: 1fr; gap: var(--s5); }
   .aud__panel { position: static; }

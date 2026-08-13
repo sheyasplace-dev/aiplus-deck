@@ -29,6 +29,34 @@ export function maskLines(el, lines) {
 }
 
 /**
+ * Tint one phrase inside already-masked lines. Runs after maskLines so the
+ * clip structure is untouched — only the text inside a line is rewritten.
+ * The phrase must sit inside a single line; a phrase spanning a line break
+ * is highlighted on each line it appears in, which is what the break was for.
+ *
+ * @param {HTMLElement[]} inners  the spans returned by maskLines
+ * @param {string} phrase         exact substring to wrap in .accent
+ */
+export function accentLines(inners, phrase) {
+  if (!phrase) return inners;
+  inners.forEach((inner) => {
+    const text = inner.textContent;
+    if (!text.includes(phrase)) return;
+    inner.textContent = '';
+    text.split(phrase).forEach((part, i) => {
+      if (i) {
+        const em = document.createElement('em');
+        em.className = 'accent';
+        em.textContent = phrase;
+        inner.appendChild(em);
+      }
+      inner.appendChild(document.createTextNode(part));
+    });
+  });
+  return inners;
+}
+
+/**
  * Wrap a single-string heading into masked lines by measuring where the
  * browser actually broke it. Re-run on resize via observeLines().
  */
@@ -81,6 +109,24 @@ export function revealLines(tl, inners, position = 0) {
     },
     position,
   );
+}
+
+/**
+ * Masked entrance for elements that have to keep their layout baseline. The
+ * clip is a clip-path on the element and the motion is on an inner wrapper —
+ * overflow:hidden would take the baseline from the box's bottom edge, which
+ * breaks any row of mixed-size items sitting on a shared line.
+ *
+ * @param {gsap.core.Timeline} tl
+ * @param {Element[]} items    the clipped elements
+ * @param {Element[]} inners   the wrapper inside each item, in the same order
+ */
+export function revealMasked(tl, items, inners, position = 0) {
+  const step = { duration: MOTION.dur, ease: MOTION.ease, stagger: MOTION.stagger };
+  tl.fromTo(items,
+    { clipPath: 'inset(0% 0% 100% 0%)' },
+    { clipPath: 'inset(0% 0% -20% 0%)', ...step }, position);
+  return tl.fromTo(inners, { yPercent: 115 }, { yPercent: 0, ...step }, position);
 }
 
 /** Standard entrance for anything that is not a headline. */

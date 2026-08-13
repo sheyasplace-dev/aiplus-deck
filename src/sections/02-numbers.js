@@ -1,5 +1,5 @@
 /* ============================================================================
-   03 NUMBERS — the evidence, stated plainly.
+   02 NUMBERS — the evidence, stated plainly.
    A hairline-divided list rather than a card grid: five figures at display
    scale need room to land, and rows let "50,000+" be genuinely large instead
    of shrinking to fit a five-column track.
@@ -10,7 +10,7 @@ import { numbers } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { countUp, setValue } from '../lib/countup.js';
 import { sectionHead } from '../lib/section.js';
-import './03-numbers.css';
+import './02-numbers.css';
 
 function row(item, i) {
   const index = String(i + 1).padStart(2, '0');
@@ -38,7 +38,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: numbers.label, index: 3 })}
+      ${sectionHead({ label: numbers.label, index: 2 })}
       <ul class="num__list">
         ${numbers.items.map(row).join('')}
       </ul>

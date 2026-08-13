@@ -6,9 +6,10 @@
 
 import { gsap } from 'gsap';
 import { brand, close } from '../data/content.js';
+import { away } from '../lib/section.js';
 import { MOTION } from '../lib/motion.js';
 import { maskLines, setLinesHidden, revealLines, revealUp } from '../lib/reveal.js';
-import './13-close.css';
+import './12-close.css';
 
 /**
  * Google Calendar template link. Returns null unless a real start date exists —
@@ -49,7 +50,7 @@ function render() {
       <p class="close__body body mute">${close.body}</p>
 
       <div class="close__ctas">
-        <a class="btn btn--primary" href="${close.ctaPrimary.href}">${close.ctaPrimary.label}</a>
+        <a class="btn btn--primary" href="${close.ctaPrimary.href}"${away(close.ctaPrimary.href)}>${close.ctaPrimary.label}</a>
         ${cal ? `<a class="btn btn--ghost" href="${cal}" target="_blank" rel="noopener">${close.calendar.label}</a>` : ''}
         <a class="link" href="${close.ctaSecondary.href}">${close.ctaSecondary.label}</a>
       </div>

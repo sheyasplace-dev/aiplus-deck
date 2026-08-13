@@ -4,6 +4,13 @@
 
 .pricing { background: var(--surface); }
 
+/* Sits between the heading and the cards; the section head owns the rule above
+   it, so this only needs to clear the cards. */
+.pricing__detail {
+  margin-top: calc(var(--s6) * -1 + var(--s4));
+  margin-bottom: var(--s6);
+}
+
 .pricing__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -21,6 +28,21 @@
   background: var(--paper);
 }
 
+/* Tier names, prices and summaries are different lengths, so a plain flex card
+   lets each band start at a different height and the three cards read ragged.
+   Subgrid pins every band — name, price, unit, summary, list, CTA — to the same
+   row lines across all three. The flex rules above stay as the fallback. */
+@supports (grid-template-rows: subgrid) {
+  .pricing__grid { grid-template-rows: auto auto auto auto 1fr auto; }
+
+  .tier {
+    display: grid;
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+
 /* The only blue-filled surface in three screens of page. It carries a real
    share of the 5% blue budget, so nothing else here competes with it. */
 .tier--featured {
@@ -30,12 +52,17 @@
 
 .tier__top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--s3);
   min-height: 24px;
   margin-bottom: var(--s5);
 }
+
+/* "Programming Partner" is long enough to meet the badge in a narrow column.
+   Let the name wrap rather than shove the badge off the card edge. */
+.tier__top > .data { flex: 1 1 auto; }
+.tier__badge { flex: 0 0 auto; }
 
 .tier__badge {
   color: var(--blue);
@@ -44,7 +71,13 @@
   background: var(--paper);
 }
 
-.tier__price { margin-bottom: var(--s2); }
+/* Figures and word-prices ("On request") share this line, so it has to survive
+   a string that is far wider than "$3,000" without spilling the card. */
+.tier__price {
+  margin-bottom: var(--s2);
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
 
 .tier__unit { margin-bottom: var(--s4); }
 
@@ -104,4 +137,9 @@
 @media (max-width: 1040px) {
   .pricing__grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
   .tier__cta { align-self: stretch; justify-content: center; }
+
+  /* Stacked cards have nothing to align to each other, and a 6-row subgrid in
+     one column would force all three into the same row lines. Back to flex. */
+  .pricing__grid { grid-template-rows: none; }
+  .tier { display: flex; grid-row: auto; }
 }

@@ -6,8 +6,11 @@
 
 import { gsap } from 'gsap';
 import { brand, hero } from '../data/content.js';
+import { away } from '../lib/section.js';
 import { MOTION, fontsReady } from '../lib/motion.js';
-import { maskLines, setLinesHidden, revealLines, revealUp } from '../lib/reveal.js';
+import {
+  maskLines, accentLines, setLinesHidden, revealLines, revealUp,
+} from '../lib/reveal.js';
 import './01-hero.css';
 
 function render() {
@@ -17,8 +20,11 @@ function render() {
 
   el.innerHTML = `
     <header class="hero__bar">
-      <span class="hero__brand data">${brand.name}</span>
-      <a class="btn btn--primary hero__bar-cta" href="${hero.ctaPrimary.href}">
+      <span class="hero__brand"
+        ><span class="hero__brand-word">${brand.mark.word}</span
+        ><span class="hero__brand-sym">${brand.mark.symbol}</span
+      ></span>
+      <a class="btn btn--primary hero__bar-cta" href="${hero.ctaPrimary.href}"${away(hero.ctaPrimary.href)}>
         ${hero.ctaPrimary.label}
       </a>
     </header>
@@ -28,7 +34,7 @@ function render() {
       <h1 class="hero__headline display t-hero"></h1>
       <p class="hero__lead body mute">${hero.body}</p>
       <div class="hero__ctas">
-        <a class="btn btn--primary" href="${hero.ctaPrimary.href}">${hero.ctaPrimary.label}</a>
+        <a class="btn btn--primary" href="${hero.ctaPrimary.href}"${away(hero.ctaPrimary.href)}>${hero.ctaPrimary.label}</a>
         <a class="link" href="${hero.ctaSecondary.href}">${hero.ctaSecondary.label} <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
@@ -57,7 +63,7 @@ export function init(mount, staticMode) {
   mount.appendChild(el);
 
   const headline = el.querySelector('.hero__headline');
-  const lines = maskLines(headline, hero.headline);
+  const lines = accentLines(maskLines(headline, hero.headline), hero.accent);
 
   const label = el.querySelector('.hero__label');
   const lead = el.querySelector('.hero__lead');

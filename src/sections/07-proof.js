@@ -76,7 +76,6 @@ function render() {
         ${sectionHead({ label: proof.label, index: 7 })}
         <div class="pw__head-row">
           <h2 class="pw__heading display t-d3">${proof.heading}</h2>
-          <p class="pw__tally data mute">${companies.length} logos</p>
         </div>
       </div>
 

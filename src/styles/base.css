@@ -158,6 +158,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .line > span { display: block; will-change: transform; }
 
+/* The one phrase a headline is allowed to tint. Set from content.js, wrapped
+   by accentLines() — never hand-marked in a template. Blue and italic: the
+   <em> is already italic by default, and Switzer's own 300 italic is loaded in
+   index.html so this is a real cut rather than a synthesised slant. */
+.accent { color: var(--blue); }
+
 /* --- Reduced motion / ?static=1 ------------------------------------------
    main.js stamps data-static on <html>. Both paths land in final state.    */
 :root[data-static='true'] .line > span { transform: none !important; }

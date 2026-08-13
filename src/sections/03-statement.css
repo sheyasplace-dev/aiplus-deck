@@ -1,62 +1,93 @@
-/* --- 02 THE ROOM ---------------------------------------------------------- */
+/* --- 03 STATEMENT --------------------------------------------------------- */
 
-/* Still the full width of the page — no max-width, no gutter. The only inset
-   is the hair of margin the rounded corners need to read as corners, so the
-   photo keeps the scale it had when this ran edge to edge. */
-.section-bleed {
+.stmt { background: var(--surface); }
+
+/* --- Top: headline left, argument right ---------------------------------- */
+.stmt__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--s6) var(--s8);
+  align-items: start;
+  margin-bottom: var(--section-pad);
+}
+
+.stmt__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+}
+
+/* The one dot of blue up here — it reads as a live indicator against a label
+   that is otherwise the quietest type on the page. */
+.stmt__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--blue-soft);
+}
+
+.stmt__headline { margin-left: -0.015em; }
+
+/* The right column starts on the headline's second line rather than its cap
+   height — level with the type it argues alongside, not with the section. */
+.stmt__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s5);
+  padding-top: clamp(var(--s5), 7vw, var(--s7));
+}
+
+.stmt__body { color: var(--ink-mute); }
+
+.stmt__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+}
+
+/* Drawn on entry, so it is a rule that arrives rather than one that was
+   always there. transform-origin is set by the tween. */
+.stmt__hr {
   width: 100%;
-  margin-block: var(--section-pad);
-  padding-inline: var(--s3);
+  height: 1px;
+  background: var(--rule);
 }
 
-/* Outer panel. Radius one step above the card token so the inner frame's
-   16px sits concentrically inside it rather than fighting it. The mat is
-   deliberately thin — it exists to separate photo from page, not to shrink
-   the photo. */
-.room__panel {
-  background: var(--surface);
-  border: var(--hairline);
-  border-radius: calc(var(--radius) + var(--s2));
-  padding: var(--s3);
+.stmt__meta {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s3);
 }
 
-.room__frame {
+/* --- Band ----------------------------------------------------------------
+   21:9 rather than the source 16:9: the crop trims ceiling and foreground
+   heads and holds the stage, which is the half of the frame doing the work. */
+.stmt__band { width: 100%; }
+
+.stmt__frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
+  aspect-ratio: 21 / 9;
   border-radius: var(--radius);
-  background: var(--surface);
+  overflow: hidden;
+  background: var(--ink);
+  will-change: clip-path;
 }
 
-.room__media {
+.stmt__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  will-change: transform;
 }
 
-/* --- Caption -------------------------------------------------------------
-   Sits on the image, so it needs its own ground rather than relying on the
-   photo being dark enough. A --paper chip keeps it legible over anything and
-   stays inside the palette — no scrims, no gradients.                      */
-.room__caption {
-  position: absolute;
-  left: var(--s4);
-  bottom: var(--s4);
-  background: var(--paper);
-  color: var(--ink);
-  padding: 10px 16px;
-  border-radius: 999px;
-}
-
-/* --- No asset yet --------------------------------------------------------- */
-.room--placeholder .room__frame {
-  border: var(--hairline);
-}
-
-.room--placeholder .room__frame::after {
-  content: 'PHOTOGRAPHY PENDING · 16:9 · public/media/room-main.jpg';
+.stmt__frame.is-empty::after {
+  content: 'ROOM PHOTOGRAPHY PENDING — 21:9';
   position: absolute;
   inset: 0;
   display: grid;
@@ -65,24 +96,28 @@
   font-size: var(--t-data);
   font-weight: 500;
   letter-spacing: var(--t-data-track);
-  text-transform: uppercase;
   color: var(--ink-mute);
-  text-align: center;
-  padding: var(--s4);
+}
+
+.stmt__caption {
+  margin-top: var(--s4);
+  color: var(--ink-mute);
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 1040px) {
+  .stmt__top {
+    grid-template-columns: 1fr;
+    gap: var(--s6);
+    margin-bottom: var(--s7);
+  }
+
+  .stmt__aside { padding-top: 0; }
+  .stmt__frame { aspect-ratio: 16 / 9; }
 }
 
 @media (max-width: 640px) {
-  /* Still narrower than 16:9 so the frame has presence on a phone, but not
-     the 4:5 a portrait crop would want — this is a wide stage shot and a tall
-     crop throws away the panel and the room either side of it. */
-  .room__panel { padding: var(--s2); border-radius: var(--radius); }
-  .room__frame { aspect-ratio: 3 / 2; border-radius: 12px; }
-  .section-bleed { padding-inline: var(--s2); }
-  .room__caption {
-    left: var(--s3);
-    right: var(--s3);
-    bottom: var(--s3);
-    text-align: center;
-  }
-  .room--placeholder .room__frame::after { font-size: 0.6rem; }
+  .stmt__meta { grid-template-columns: 1fr; gap: var(--s2); }
+  .stmt__frame { aspect-ratio: 4 / 3; }
+  .stmt__ctas .btn { flex: 1 1 auto; justify-content: center; }
 }

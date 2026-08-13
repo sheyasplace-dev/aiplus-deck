@@ -1,129 +1,108 @@
 /* ============================================================================
-   02 THE ROOM — the first evidence, landing straight after a section with no
-   image at all. An inset rounded panel rather than a full bleed: held in from
-   the page margins, capped short of --maxw, photo sitting on a --surface mat.
+   03 STATEMENT — the proposition at full scale, over the room it describes.
 
-   Two media paths, chosen by content.js:
-   · room.video set → scroll-scrubbed video, currentTime driven by progress
-   · otherwise      → still image, revealed with a clip wipe
-   Neither asset present → a --surface block at the right ratio, so layout and
-   timing stay reviewable before the photography lands.
+   Two halves on one line: the headline holds the left, the argument and the
+   facts hold the right. Underneath, a 21:9 band of the room itself. The
+   section is the deck's turn from figures to evidence, so the entrance runs as
+   one timeline rather than three independent triggers — headline, then the
+   right column, then the band wiping open under both.
    ============================================================================ */
 
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { room } from '../data/content.js';
+import { statement as S } from '../data/content.js';
+import { away } from '../lib/section.js';
 import { MOTION } from '../lib/motion.js';
-import './02-room.css';
-
-function media() {
-  if (room.video) {
-    return `<video class="room__media" src="${room.video}"
-              muted playsinline preload="auto" aria-label="${room.alt}"></video>`;
-  }
-  return `<img class="room__media" src="${room.image}" alt="${room.alt}"
-            style="object-position:${room.focus}"
-            decoding="async" fetchpriority="high">`;
-}
+import {
+  maskLines, accentLines, setLinesHidden, revealLines, revealUp,
+} from '../lib/reveal.js';
+import './03-statement.css';
 
 function render() {
   const el = document.createElement('section');
-  el.className = 'section-bleed room';
-  el.id = 'room';
+  el.className = 'section stmt';
+  el.id = 'statement';
 
   el.innerHTML = `
-    <figure class="room__panel">
-      <div class="room__frame">
-        ${media()}
-        <figcaption class="room__caption data">${room.caption}</figcaption>
+    <div class="wrap">
+      <div class="stmt__top">
+        <div class="stmt__lead">
+          <p class="stmt__eyebrow data mute"><span class="stmt__dot"></span>${S.eyebrow}</p>
+          <h2 class="stmt__headline display t-d1"></h2>
+        </div>
+
+        <div class="stmt__aside">
+          <p class="stmt__body body">${S.body}</p>
+          <div class="stmt__ctas">
+            <a class="btn btn--primary" href="${S.ctaPrimary.href}"${away(S.ctaPrimary.href)}>${S.ctaPrimary.label}</a>
+            <a class="btn btn--ghost" href="${S.ctaSecondary.href}"${away(S.ctaSecondary.href)}>${S.ctaSecondary.label}</a>
+          </div>
+          <span class="stmt__hr"></span>
+          <ul class="stmt__meta">
+            ${S.meta.map((m) => `<li class="data mute">${m}</li>`).join('')}
+          </ul>
+        </div>
       </div>
-    </figure>
+
+      <figure class="stmt__band">
+        <div class="stmt__frame">
+          <img class="stmt__img" src="${S.media.image}" alt="${S.media.alt}"
+               style="object-position:${S.media.focus}" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="stmt__caption data">${S.media.caption}</figcaption>
+      </figure>
+    </div>
   `;
 
-  // No asset on disk yet: fall back to the placeholder ground rather than a
-  // broken-image icon.
-  const asset = el.querySelector('.room__media');
-  asset.addEventListener('error', () => {
-    el.classList.add('room--placeholder');
-    asset.remove();
+  // No file on disk yet: drop to the placeholder ground rather than a broken
+  // image, so the band still holds its ratio and the timing stays reviewable.
+  el.querySelector('.stmt__img').addEventListener('error', (e) => {
+    e.target.closest('.stmt__frame').classList.add('is-empty');
+    e.target.remove();
   });
 
   return el;
-}
-
-/** Drives video.currentTime from scroll progress while the section is pinned. */
-function scrubVideo(el) {
-  const video = el.querySelector('video');
-  if (!video) return;
-
-  const seek = (progress) => {
-    if (!video.duration) return;
-    video.currentTime = video.duration * progress;
-  };
-
-  ScrollTrigger.create({
-    trigger: el,
-    start: 'top top',
-    end: '+=150%',
-    pin: true,
-    scrub: 0.4,
-    onUpdate: (self) => seek(self.progress),
-  });
 }
 
 export function init(mount, staticMode) {
   const el = render();
   mount.appendChild(el);
 
-  const panel = el.querySelector('.room__panel');
-  const asset = el.querySelector('.room__media');
-  const caption = el.querySelector('.room__caption');
+  const lines = accentLines(maskLines(el.querySelector('.stmt__headline'), S.headline), S.accent);
+  const eyebrow = el.querySelector('.stmt__eyebrow');
+  const body = el.querySelector('.stmt__body');
+  const ctas = [...el.querySelector('.stmt__ctas').children];
+  const hr = el.querySelector('.stmt__hr');
+  const meta = [...el.querySelectorAll('.stmt__meta li')];
+  const frame = el.querySelector('.stmt__frame');
+  const img = el.querySelector('.stmt__img');
+  const caption = el.querySelector('.stmt__caption');
 
   if (staticMode) return el;
 
-  // Panel arrives first, on the standard y/opacity entrance — the mat is the
-  // frame the wipe then plays inside.
-  gsap.fromTo(
-    panel,
-    { y: MOTION.y, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: MOTION.dur,
-      ease: MOTION.ease,
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-    },
-  );
+  setLinesHidden(lines);
+  gsap.set([eyebrow, body, ...ctas, ...meta, caption], { opacity: 0 });
+  gsap.set(hr, { scaleX: 0, transformOrigin: 'left center' });
 
-  // Clip wipe rather than a fade — same masked vocabulary as the headlines.
-  // Runs on the media, not the frame, so the frame's radius keeps clipping
-  // the corners while the inset animates.
-  gsap.fromTo(
-    asset || panel,
-    { clipPath: 'inset(100% 0% 0% 0%)' },
-    {
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: MOTION.dur,
-      ease: MOTION.ease,
-      delay: 0.12,
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-    },
-  );
+  const tl = gsap.timeline({
+    defaults: { ease: MOTION.ease },
+    scrollTrigger: { trigger: el, start: 'top 72%', once: true },
+  });
 
-  gsap.fromTo(
-    caption,
-    { y: MOTION.y, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: MOTION.dur,
-      ease: MOTION.ease,
-      delay: 0.25,
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-    },
-  );
+  revealUp(tl, eyebrow, 0);
+  revealLines(tl, lines, 0.08);
+  revealUp(tl, body, 0.34);
+  revealUp(tl, ctas, '-=0.85');
+  // The rule draws before the facts land on it.
+  tl.to(hr, { scaleX: 1, duration: MOTION.dur }, '-=0.9');
+  revealUp(tl, meta, '-=0.8');
 
-  scrubVideo(el);
+  // The band wipes open from its own bottom edge while the picture settles out
+  // of a slight overscale — the frame never moves, so nothing below it shifts.
+  tl.fromTo(frame,
+    { clipPath: 'inset(0% 0% 100% 0%)' },
+    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4 }, '-=1.05')
+    .fromTo(img, { scale: 1.08 }, { scale: 1, duration: 1.9 }, '<');
+  revealUp(tl, caption, '-=1.2');
 
   return el;
 }

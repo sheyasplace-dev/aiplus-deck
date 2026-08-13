@@ -18,7 +18,7 @@ export function setValue(el, value, suffix = '') {
  *
  * Counting is width-unstable — "9" is narrower than "50,000" — so the element
  * reserves its final width up front via a hidden sizing twin in the markup.
- * See .num__figure in 03-numbers.css.
+ * See .num__figure in 02-numbers.css.
  *
  * @param {HTMLElement} el
  * @param {object} opts

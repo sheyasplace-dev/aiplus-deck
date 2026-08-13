@@ -11,7 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { pricing } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
-import './11-pricing.css';
+import './10-pricing.css';
 
 function tierCard(tier) {
   return `
@@ -43,7 +43,9 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: pricing.label, index: 11, heading: pricing.heading })}
+      ${sectionHead({ label: pricing.label, index: 10, heading: pricing.heading })}
+
+      ${pricing.detail ? `<p class="pricing__detail lead mute">${pricing.detail}</p>` : ''}
 
       <div class="pricing__grid">
         ${pricing.tiers.map(tierCard).join('')}

@@ -13,7 +13,7 @@ import { testimonials } from '../data/content.js';
 import { MOTION } from '../lib/motion.js';
 import { sectionHead } from '../lib/section.js';
 import { maskAutoLines, observeLines, setLinesHidden, revealLines } from '../lib/reveal.js';
-import './10-testimonials.css';
+import './09-testimonials.css';
 
 function item(t) {
   return `
@@ -34,7 +34,7 @@ function render() {
 
   el.innerHTML = `
     <div class="wrap">
-      ${sectionHead({ label: testimonials.label, index: 10 })}
+      ${sectionHead({ label: testimonials.label, index: 9 })}
       <div class="quo__list">${testimonials.items.map(item).join('')}</div>
     </div>
   `;
