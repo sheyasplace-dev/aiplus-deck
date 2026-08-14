@@ -555,7 +555,7 @@ export const pricing = {
   tiers: [
     {
       name: 'Co-host',
-      price: '$3,000+',                                                  // [U]
+      price: '$5,000+',                                                  // [U]
       unit: 'PER EDITION',
       summary: 'You host. We fill the room and promote the event better.',
       includes: [                                                       // [U] all
